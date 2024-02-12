@@ -13,6 +13,7 @@ def agregar_camper(nombre_completo,direcion,acudiente,telefono_de_contacto,telef
  
  while True:
     try: 
+        
        direcion=input("Ingresa la direccion del Camper")
        break
     except ValueError("Ingresa direccion valida"):
