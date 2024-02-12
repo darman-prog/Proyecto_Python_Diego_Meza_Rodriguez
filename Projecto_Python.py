@@ -1,8 +1,9 @@
-from faker import Faker
+rom faker import Faker
 import random
 
-listado_de_campers = []
 
+
+listado_de_campers = []
 def agregar_camper():
     campers = []
 
@@ -67,6 +68,8 @@ def agregar_camper():
 
 fake = Faker('es_CO')
 
+
+
 listado_de_documentos=[]
 def generar_documentos(num_documentos):
     documentos = []
@@ -109,6 +112,9 @@ Areas_de_entrenamiento = {
     "Backend": (33, ["NetCore", "Spring Boot", "NodeJS y Express"])
 }
 
+import json
+areas_json = json.dumps(Areas_de_entrenamiento,indent=4)
+
 def Coordinadora_Registro_Notas():
     nombre_completo = input("Ingresa nombre del camper que deseas buscar")
     for camper in listado_de_campers:
@@ -127,8 +133,54 @@ def Coordinadora_Registro_Notas():
             break
     else:
         print("Camper no encontrado")
-
-
+def menu_Rol():
+    while True:
+        print("-------- Escoje un Rol Para ingresar ----------")
+        print("          1. Coordinador                       ")  
+        print("          2. Trainer                           ")
+        print("          3. Camper                            ")
+        print("          4. Salir                             ")
+        print("_______________________________________________")      
+     
+        while True:
+            try:
+                opcion_de_rol = int(input("Escoje un número designado para cada rol para ingresar: "))
+                break
+            except ValueError:
+                print("Ingresa otra vez.")
+                
+        if opcion_de_rol == 1:
+            print("Escribe la Contraseña para Entrar a Rol de Coordinacion")
+            while True:
+                try:
+                   while:
+                    contraseña = int(input("Ingresa la contraseña: "))
+                    if contraseña == 1234:
+                       print("Bienvenido Coordinador/a")
+                       break
+                    else:
+                        print("Contraseña incorrecta. Intenta nuevamente.")
+                except ValueError:
+                    print("Ingresa un valor numérico para la contraseña.")
+                    
+        elif opcion_de_rol == 2:
+            print("Bienvenido Trainer")
+            print("Escribe la Contraseña para Entrar a Rol de Trainer")
+            while True:
+                try:
+                    contraseña_trainer = int(input("Ingresa la contraseña "))
+                    if contraseña_trainer == 5678:
+                        print("Bienvenido Trainer ")
+                        break
+                    else:
+                        print("Contraseña incorrecta. Intenta nuevamente.")
+                except ValueError:
+                    print("Ingresa un Valor Numèrico para Entrar a Rol de Trainer")         
+        elif opcion_de_rol == 3:
+            print("Bienvenido Camper")
+        else:
+            print("saliendo Del Programa.....")
+            break
 def menu():
     while True:
         print("_____________CampusLand____________________")
@@ -152,7 +204,8 @@ def menu():
                 
                 print("1. agregar Camper ")
                 print("2. Ver Campers Inscritos")
-                print("3. para volver Al menu Principal")
+                print("3. Eliminar Registro De camper")
+                print("4. para volver Al menu Principal")
 
                 try:
                     opcion1 = int(input("Que Opcion eliges: "))
@@ -187,6 +240,7 @@ def menu():
                 
                 if opcion2 == 1:
                     print("Ingresaste Registro de Notas")
+
                 elif opcion2 == 2:
                     print("Ingresaste a Eliminar Camper ") 
                 elif opcion2 == 3:
@@ -208,4 +262,7 @@ def menu():
 
 listado_de_documentos = generar_documentos(33)
 
-menu()  
+
+
+menu_Rol()
+
