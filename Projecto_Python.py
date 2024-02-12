@@ -129,12 +129,6 @@ def Coordinadora_Registro_Notas():
         print("Camper no encontrado")
 
 
-def MenuCoordinador():
-    while True:
-        print("1.Registro de Notas")
-        print("2.Eliminar Camper")
-
-
 def menu():
     while True:
         print("_____________CampusLand____________________")
@@ -155,6 +149,7 @@ def menu():
         if opcion == 1:
             print("Ingresaste a Campers Inscritos/Agregar Camper ")
             while True:
+                
                 print("1. agregar Camper ")
                 print("2. Ver Campers Inscritos")
                 print("3. para volver Al menu Principal")
@@ -179,7 +174,25 @@ def menu():
 
         elif opcion == 2:
             print("Ingresaste Coordinacion Academica")
-
+            while True:
+                
+                print("1.Registro de Notas")
+                print("2.Eliminar Camper")
+                print("3. para volver Al menu principal")
+                
+                try:
+                    opcion2 = int(input("Ingresa Una Opcion valida"))
+                except ValueError:
+                    print("Ingresa Opcion valida")
+                
+                if opcion2 == 1:
+                    print("Ingresaste Registro de Notas")
+                elif opcion2 == 2:
+                    print("Ingresaste a Eliminar Camper ") 
+                elif opcion2 == 3:
+                    break 
+                else:
+                    print("ingresa opcion valida")  
         elif opcion == 3:
             print("Ingresaste Trainers Activos")
 
