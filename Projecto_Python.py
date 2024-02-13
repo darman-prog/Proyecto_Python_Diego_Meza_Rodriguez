@@ -2,12 +2,7 @@ from faker import Faker
 import random
 
 def ver_horarios():
-   opcion_horario=input("Escoje Diurno o Nocturno").lower
-  
-   if opcion_horario=="diurno":
-     print(horario_Diurno)
-   elif opcion_horario == "nocturno": 
-       print(horario_Nocturno)
+   opcion_horario=input("Escoje Diurno o Nocturno").lower()
    horario_Diurno =[
          {     
         "artemis":"6 AM Hasta 2 PM ",
@@ -28,7 +23,10 @@ def ver_horarios():
 {"Apolo":"2 PM Hasta 10 PM"
  }
     ]
-
+   if opcion_horario=="diurno":
+     print(horario_Diurno)
+   elif opcion_horario == "nocturno": 
+       print(horario_Nocturno)
 
 
 listado_de_campers = []
@@ -96,12 +94,21 @@ def agregar_camper():
 
 fake = Faker('es_CO')
 
-
+import json
 
 listado_de_documentos=[]
-def generar_documentos(num_documentos):
+def generar_documentos():
+   try:
+    with open("campers_Documentacion.json","r") as file:
+        documento=json.load(file)
+        if len(documento) >= 198:
+            return documento[:198]
+   except FileNotFoundError:
+    pass
+   
     documentos = []
-    for _ in range(num_documentos):
+    nuevo_documentos = []
+    for _ in range(198-len(documentos)):
         nombre_de_camper = fake.name()
         cedula = fake.unique.ssn()
         numero_celular = fake.phone_number()
@@ -123,9 +130,22 @@ def generar_documentos(num_documentos):
             "Estado Del camper": estado,
         }
 
-        documentos.append(documento)
 
+        nuevo_documentos.append(documento)
+   
+    if documentos:
+        documentos.extend(nuevo_documentos)
+    else:
+        documentos = nuevo_documentos
+
+
+        with open("Campers_Documentacion.json", 'w') as file:
+              json.dump(documentos, file)
+   
     return documentos
+
+listado_de_documentos = generar_documentos()
+
 
 
 
@@ -158,6 +178,7 @@ def Coordinadora_Registro_Notas():
             break
     else:
         print("Camper no encontrado")
+    
 def menu_Rol():
     while True:
         print("-------- Escoje un Rol Para ingresar ----------")
@@ -178,19 +199,17 @@ def menu_Rol():
             print("Escribe la Contraseña para Entrar a Rol de Coordinacion")
             while True:
                 try:
-                   while True:
                     contraseña = int(input("Ingresa la contraseña: "))
                     if contraseña == 1234:
-                       print("Bienvenido Coordinador/a")
-                       menu()
-                       break
+                        print("Bienvenido Coordinador/a")
+                        menu()
+                        break
                     else:
                         print("Contraseña incorrecta. Intenta nuevamente.")
                 except ValueError:
                     print("Ingresa un valor numérico para la contraseña.")
                     
         elif opcion_de_rol == 2:
-            print("Bienvenido Trainer")
             print("Escribe la Contraseña para Entrar a Rol de Trainer")
             while True:
                 try:
@@ -204,18 +223,26 @@ def menu_Rol():
                     print("Ingresa un Valor Numèrico para Entrar a Rol de Trainer")         
         elif opcion_de_rol == 3:
             print("Bienvenido Camper")
+        elif opcion_de_rol == 4:
+            print("Saliendo Del Programa...")
+            return  # Salir del programa desde el menú de roles
         else:
-            print("saliendo Del Programa.....")
-            break
+            print("Ingresa Opcion valida")
+
 def menu():
     while True:
         print("_____________CampusLand____________________")
+   
         print("_____________ / Menu \ ____________________")
+   
+       
         print("1. Campers Inscritos/Agregar Camper ")
         print("2. Coordinacion Academica/Registro de Notas de Campers ")
         print("3. Trainers Activos/Rutas Asignadas ")
-        print("4. Estados de Campers/Informacion de campers ")
-        print("5. Salir Del Programa")
+        print("4. Estados de Campers/Informacion de campers           ")
+        print("5. Salir Del Programa               ")
+
+        print("____________________________________________")
 
         while True:
             try:
@@ -266,7 +293,8 @@ def menu():
                 
                 if opcion2 == 1:
                     print("Ingresaste Registro de Notas")
-
+                    Coordinadora_Registro_Notas()
+                           
                 elif opcion2 == 2:
                     print("Ingresaste a Eliminar Camper ") 
                 elif opcion2 == 3:
@@ -280,13 +308,13 @@ def menu():
             print("Ingresaste a Estados de Campers")
 
         elif opcion == 5:
-            print("Saliendo del Programa...")
+            print("Saliendo Del Programa")
             break
 
         else:
             print("Ingresa Opcion valida")
 
-listado_de_documentos = generar_documentos(33)
+listado_de_documentos = generar_documentos()
 
 
 
