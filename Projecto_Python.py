@@ -1,11 +1,37 @@
 from faker import Faker
 import random
 
+def ver_horarios():
+   opcion_horario=input("Escoje Diurno o Nocturno").lower
+  
+   if opcion_horario=="diurno":
+     print(horario_Diurno)
+   elif opcion_horario == "nocturno": 
+       print(horario_Nocturno)
+   horario_Diurno =[
+         {     
+        "artemis":"6 AM Hasta 2 PM ",
+         },
+       {
+        "Sputnik":"6 AM Hasta 2 PM ",
+       },
+       {
+        "Apolo":"6 AM Hasta 2 PM "
+    }                    
+    ]
+   horario_Nocturno = [
+{"Artemis":"2 PM Hasta 10 PM"
+ },
+{
+"Sputnik":"2 PM Hasta 10 PM" 
+},
+{"Apolo":"2 PM Hasta 10 PM"
+ }
+    ]
+
 
 
 listado_de_campers = []
-def Registro_de_camper():
-
 def agregar_camper():
     campers = []
 
@@ -114,9 +140,6 @@ Areas_de_entrenamiento = {
     "Backend": (33, ["NetCore", "Spring Boot", "NodeJS y Express"])
 }
 
-import json
-areas_json = json.dumps(Areas_de_entrenamiento,indent=4)
-
 def Coordinadora_Registro_Notas():
     nombre_completo = input("Ingresa nombre del camper que deseas buscar")
     for camper in listado_de_campers:
@@ -159,6 +182,7 @@ def menu_Rol():
                     contraseña = int(input("Ingresa la contraseña: "))
                     if contraseña == 1234:
                        print("Bienvenido Coordinador/a")
+                       menu()
                        break
                     else:
                         print("Contraseña incorrecta. Intenta nuevamente.")
@@ -183,30 +207,14 @@ def menu_Rol():
         else:
             print("saliendo Del Programa.....")
             break
-def menu_Camper():
-    while True:
-        print("________Bienvenido Camper_________")
-        print("        1.Registro De Camper      ")
-        print("        2.Salir                         ")
-        opcion_camper = int(input("Ingresa el numero asignado para cada Opcion Para ingresar"))
-        if opcion_camper == 1:
-            
-def menu_trainer():
-    while True:
-        print("_____________Bienvenido Trainer______________")
-        print("             1.Registro De Trainer           ")
-        print("             2.Horarios                    ") 
-        print("             3.salir                               ")
-
-def menu_coordinadora():
+def menu():
     while True:
         print("_____________CampusLand____________________")
         print("_____________ / Menu \ ____________________")
-        print("       Bienvenida Coordinador/a            ")
         print("1. Campers Inscritos/Agregar Camper ")
-        print("2. Ingresar  Notas de Campers/Asignacion de Rutas ")
+        print("2. Coordinacion Academica/Registro de Notas de Campers ")
         print("3. Trainers Activos/Rutas Asignadas ")
-        print("4. Estados de Campers/notas de campers ")
+        print("4. Estados de Campers/Informacion de campers ")
         print("5. Salir Del Programa")
 
         while True:
@@ -223,7 +231,7 @@ def menu_coordinadora():
                 print("1. agregar Camper ")
                 print("2. Ver Campers Inscritos")
                 print("3. Eliminar Registro De camper")
-                print("4. Salir                       ")
+                print("4. para volver Al menu Principal")
 
                 try:
                     opcion1 = int(input("Que Opcion eliges: "))
@@ -283,3 +291,4 @@ listado_de_documentos = generar_documentos(33)
 
 
 menu_Rol()
+
