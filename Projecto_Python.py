@@ -4,6 +4,8 @@ import random
 
 
 listado_de_campers = []
+def Registro_de_camper():
+
 def agregar_camper():
     campers = []
 
@@ -153,7 +155,7 @@ def menu_Rol():
             print("Escribe la Contraseña para Entrar a Rol de Coordinacion")
             while True:
                 try:
-                   while:
+                   while True:
                     contraseña = int(input("Ingresa la contraseña: "))
                     if contraseña == 1234:
                        print("Bienvenido Coordinador/a")
@@ -181,14 +183,30 @@ def menu_Rol():
         else:
             print("saliendo Del Programa.....")
             break
-def menu():
+def menu_Camper():
+    while True:
+        print("________Bienvenido Camper_________")
+        print("        1.Registro De Camper      ")
+        print("        2.Salir                         ")
+        opcion_camper = int(input("Ingresa el numero asignado para cada Opcion Para ingresar"))
+        if opcion_camper == 1:
+            
+def menu_trainer():
+    while True:
+        print("_____________Bienvenido Trainer______________")
+        print("             1.Registro De Trainer           ")
+        print("             2.Horarios                    ") 
+        print("             3.salir                               ")
+
+def menu_coordinadora():
     while True:
         print("_____________CampusLand____________________")
         print("_____________ / Menu \ ____________________")
+        print("       Bienvenida Coordinador/a            ")
         print("1. Campers Inscritos/Agregar Camper ")
-        print("2. Coordinacion Academica/Registro de Notas de Campers ")
+        print("2. Ingresar  Notas de Campers/Asignacion de Rutas ")
         print("3. Trainers Activos/Rutas Asignadas ")
-        print("4. Estados de Campers/Informacion de campers ")
+        print("4. Estados de Campers/notas de campers ")
         print("5. Salir Del Programa")
 
         while True:
@@ -205,7 +223,7 @@ def menu():
                 print("1. agregar Camper ")
                 print("2. Ver Campers Inscritos")
                 print("3. Eliminar Registro De camper")
-                print("4. para volver Al menu Principal")
+                print("4. Salir                       ")
 
                 try:
                     opcion1 = int(input("Que Opcion eliges: "))
@@ -265,4 +283,3 @@ listado_de_documentos = generar_documentos(33)
 
 
 menu_Rol()
-
