@@ -331,6 +331,7 @@ def menu_rol():
                     contraseña_trainer = int(input("Ingresa la contraseña "))
                     if contraseña_trainer == 5678:
                         print("Bienvenido Trainer ")
+                        menu_trainer()
                         break
                     else:
                         print("Contraseña incorrecta. Intenta nuevamente.")
@@ -338,6 +339,8 @@ def menu_rol():
                     print("Ingresa un Valor Numèrico para Entrar a Rol de Trainer")         
         elif opcion_de_rol == 3:
             print("Bienvenido Camper")
+            menu_Camper()
+            break
         elif opcion_de_rol == 4:
             print("Saliendo Del Programa...")
             return  
@@ -353,19 +356,27 @@ def menu_Camper():
         if opcion_camper == 1:
             print("")
 
+
+
+def registro_trainer():
+    
+
+
 def menu_trainer():
     while True:
         print("_____________Bienvenido Trainer______________")
         print("             1.Registro De Trainer           ")
         print("             2.Horarios                    ") 
         print("             3.salir                               ")
-
+        opcion_trainer = int(input("ingresa el numero desigando para ingresar a una Opcion"))
+        if opcion_trainer == 1:
+            
 def menu_coordinadora():
     while True:
-        print("___________ Campusland _________________")
+        print("___________Campusland_________________")
    
         print("____________ (Menu) ____________________")
-        print("      Coordinacion Academica                           ") 
+        print("      (Coordinacion Academica)                           ") 
          
         print("1. Campers Inscritos/Agregar Camper ")
         print("2. Coordinacion Academica/Registro de Notas de Campers ")
