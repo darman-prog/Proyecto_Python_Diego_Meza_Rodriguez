@@ -91,6 +91,70 @@ def agregar_camper():
     listado_de_campers.append(campers)
   
     return campers
+def Registro_de_camper():
+    Registro_manual_de_camper = []
+
+    while True:
+        nombre_completo = input("Ingresa tu Nombre Completo: ")
+        if nombre_completo.strip(): 
+            Registro_manual_de_camper.append(nombre_completo)
+            break
+        else:
+            print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
+
+    while True:
+        try:
+            Documento_de_camper = int(input("Ingresa numero de documento: "))
+            Registro_manual_de_camper.append(Documento_de_camper)
+            break
+        except ValueError:
+            print("Ingresa Un Documento valido (número entero)")
+
+    direcion = input("Ingresa tu dirección: ")
+    if direcion.strip(): 
+        Registro_manual_de_camper.append(direcion)
+    else:
+        print("La dirección no puede estar vacía. Por favor, ingrésala nuevamente.")
+
+    acudiente = input("Ingresa el nombre de tu acudiente: ")
+    if acudiente.strip():  
+        Registro_manual_de_camper.append(acudiente)
+    else:
+        print("El nombre del acudiente no puede estar vacío. Por favor, ingrésalo nuevamente.")
+
+    while True:
+        try:
+            telefono_de_contacto = int(input("Ingresa tu número celular: "))
+            Registro_manual_de_camper.append(telefono_de_contacto)
+            break
+        except ValueError:
+            print("Ingresa número de teléfono válido (número entero)")
+
+    while True:
+        try:
+            telefono_de_fijo = int(input("Ahora Ingresa tu número fijo: "))
+            Registro_manual_de_camper.append(telefono_de_fijo)
+            break
+        except ValueError:
+            print("Ingresa número de teléfono válido (número entero)")
+
+    estado = input("Ingresa estado en la que se encuentra el camper: ")
+    if estado.strip():  
+        Registro_manual_de_camper.append(estado)
+    else:
+        print("El estado no puede estar vacío. Por favor, ingrésalo nuevamente.")
+
+    riesgo = input("Ingresa el riesgo del camper: ")
+    if riesgo.strip(): 
+        Registro_manual_de_camper.append(riesgo)
+    else:
+        print("El riesgo no puede estar vacío. Por favor, ingrésalo nuevamente.")
+
+    print("Registro Terminado. Proximamente te Contactaremos.")
+    return Registro_manual_de_camper
+
+
+
 
 fake = Faker('es_CO')
 
@@ -150,14 +214,39 @@ listado_de_documentos = generar_documentos()
 
 
 Areas_de_entrenamiento = {
-    "Ruta NodeJS": (33, ["NodeJS", "Express", "MongoDB"]),
-    "Ruta Java": (33, ["Java", "Spring Boot", "Hibernate"]),
-    "Ruta Netcore": (33, ["NetCore", "Entity Framework", "SQL Server"]),
-    "Fundamentos de programación": (33, ["Introducción a la algoritmia", "PSeInt", "Python"]),
-    "Programación Web": (33, ["HTML", "CSS", "Bootstrap"]),
-    "Programación formal": (33, ["Java", "JavaScript", "C#"]),
-    "Bases de datos": (33, ["MySQL", "MongoDB", "PostgreSQL"]),
-    "Backend": (33, ["NetCore", "Spring Boot", "NodeJS y Express"])
+    "Ruta NodeJS": {
+        "Capacidad": 33,
+        "Modulos": ["NodeJS", "Express", "MongoDB"]
+    },
+    "Ruta Java": {
+        "Capacidad": 33,
+        "Modulos": ["Java", "Spring Boot", "Hibernate"]
+    },
+    "Ruta Netcore": {
+        "Capacidad": 33,
+        "Modulos": ["NetCore", "Entity Framework", "SQL Server"]
+    },
+    "Fundamentos de programación": {
+        "Capacidad": 33,
+        "Modulos": ["Introducción a la algoritmia", "PSeInt", "Python"]
+    },
+    "Programación Web": {
+        "Capacidad": 33,
+        "Modulos": ["HTML", "CSS", "Bootstrap"]
+    },
+    "Programación formal": {
+        "Capacidad": 33,
+        "Modulos": ["Java", "JavaScript", "C#"]
+    },
+    "Bases de datos": {
+        "Capacidad": 33,
+        "Modulos": ["MySQL", "MongoDB", "PostgreSQL"]
+    },
+    "Backend": {
+        "Capacidad": 33,
+        "duracion_meses":2,
+        "Modulos": ["NetCore", "Spring Boot", "NodeJS y Express"]
+    }
 }
 
 def Coordinadora_Registro_Notas():
@@ -178,9 +267,35 @@ def Coordinadora_Registro_Notas():
             break
     else:
         print("Camper no encontrado")
-    
-def menu_Rol():
+def evaluar_campers():
+    for camper in listado_de_campers:
+        for modulo in camper["Modulos"]:
+            
+            nota_final = (modulo["Nota_teorica"] * 0.3) + (modulo["Nota_practica"] * 0.6) + (modulo["Trabajos"] * 0.1)
+            
+           
+            if nota_final >= 60:
+                modulo["Estado"] = "Aprobado"
+            else:
+                modulo["Estado"] = "Rendimiento bajo"
+                
+               
+                
+            modulo["Nota_final"] = nota_final
+
+        
+        rendimientos = [modulo["Estado"] for modulo in camper["Modulos"]]
+        if "Rendimiento bajo" in rendimientos:
+            camper["Estado"] = "Rendimiento bajo"
+        else:
+            camper["Estado"] = "Aprobado"
+
+      
+        index = listado_de_campers.index(camper)
+        listado_de_campers[index] = camper
+def menu_rol():
     while True:
+        print("                                               ")
         print("-------- Escoje un Rol Para ingresar ----------")
         print("          1. Coordinador                       ")  
         print("          2. Trainer                           ")
@@ -202,7 +317,7 @@ def menu_Rol():
                     contraseña = int(input("Ingresa la contraseña: "))
                     if contraseña == 1234:
                         print("Bienvenido Coordinador/a")
-                        menu()
+                        menu_coordinadora()
                         break
                     else:
                         print("Contraseña incorrecta. Intenta nuevamente.")
@@ -225,17 +340,33 @@ def menu_Rol():
             print("Bienvenido Camper")
         elif opcion_de_rol == 4:
             print("Saliendo Del Programa...")
-            return  # Salir del programa desde el menú de roles
+            return  
         else:
             print("Ingresa Opcion valida")
 
-def menu():
+def menu_Camper():
     while True:
-        print("_____________CampusLand____________________")
+        print("________Bienvenido Camper_________")
+        print("        1.Registro De Camper      ")
+        print("        2.Salir                         ")
+        opcion_camper = int(input("Ingresa el numero asignado para cada Opcion Para ingresar"))
+        if opcion_camper == 1:
+            print("")
+
+def menu_trainer():
+    while True:
+        print("_____________Bienvenido Trainer______________")
+        print("             1.Registro De Trainer           ")
+        print("             2.Horarios                    ") 
+        print("             3.salir                               ")
+
+def menu_coordinadora():
+    while True:
+        print("___________ Campusland _________________")
    
-        print("_____________ / Menu \ ____________________")
-   
-       
+        print("____________ (Menu) ____________________")
+        print("      Coordinacion Academica                           ") 
+         
         print("1. Campers Inscritos/Agregar Camper ")
         print("2. Coordinacion Academica/Registro de Notas de Campers ")
         print("3. Trainers Activos/Rutas Asignadas ")
@@ -318,5 +449,5 @@ listado_de_documentos = generar_documentos()
 
 
 
-menu_Rol()
+menu_rol()
 
