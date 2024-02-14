@@ -1,33 +1,25 @@
 from faker import Faker
 import random
+import json
+import os
 
 def ver_horarios():
-   opcion_horario=input("Escoje Diurno o Nocturno").lower()
-   horario_Diurno =[
-         {     
-        "artemis":"6 AM Hasta 2 PM ",
-         },
-       {
-        "Sputnik":"6 AM Hasta 2 PM ",
-       },
-       {
-        "Apolo":"6 AM Hasta 2 PM "
-    }                    
+    opcion_horario = input("Escoje diurno o nocturno").strip().lower()
+    horario_Diurno = [
+        {"artemis": "6 AM Hasta 2 PM"},
+        {"Sputnik": "6 AM Hasta 2 PM"},
+        {"Apolo": "6 AM Hasta 2 PM"}
     ]
-   horario_Nocturno = [
-{"Artemis":"2 PM Hasta 10 PM"
- },
-{
-"Sputnik":"2 PM Hasta 10 PM" 
-},
-{"Apolo":"2 PM Hasta 10 PM"
- }
+    horario_Nocturno = [
+        {"Artemis": "2 PM Hasta 10 PM"},
+        {"Sputnik": "2 PM Hasta 10 PM"},
+        {"Apolo": "2 PM Hasta 10 PM"}
     ]
-   if opcion_horario=="diurno":
-     print(horario_Diurno)
-   elif opcion_horario == "nocturno": 
-       print(horario_Nocturno)
 
+    if opcion_horario == "diurno":
+        print(horario_Diurno)
+    elif opcion_horario == "nocturno":
+        print(horario_Nocturno)
 
 listado_de_campers = []
 def agregar_camper():
@@ -91,96 +83,28 @@ def agregar_camper():
     listado_de_campers.append(campers)
   
     return campers
-def Registro_de_camper():
-    Registro_manual_de_camper = []
 
-    while True:
-        nombre_completo = input("Ingresa tu Nombre Completo: ")
-        if nombre_completo.strip(): 
-            Registro_manual_de_camper.append(nombre_completo)
-            break
-        else:
-            print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
+faker = Faker('es_CO')
 
-    while True:
-        try:
-            Documento_de_camper = int(input("Ingresa numero de documento: "))
-            Registro_manual_de_camper.append(Documento_de_camper)
-            break
-        except ValueError:
-            print("Ingresa Un Documento valido (número entero)")
-
-    direcion = input("Ingresa tu dirección: ")
-    if direcion.strip(): 
-        Registro_manual_de_camper.append(direcion)
-    else:
-        print("La dirección no puede estar vacía. Por favor, ingrésala nuevamente.")
-
-    acudiente = input("Ingresa el nombre de tu acudiente: ")
-    if acudiente.strip():  
-        Registro_manual_de_camper.append(acudiente)
-    else:
-        print("El nombre del acudiente no puede estar vacío. Por favor, ingrésalo nuevamente.")
-
-    while True:
-        try:
-            telefono_de_contacto = int(input("Ingresa tu número celular: "))
-            Registro_manual_de_camper.append(telefono_de_contacto)
-            break
-        except ValueError:
-            print("Ingresa número de teléfono válido (número entero)")
-
-    while True:
-        try:
-            telefono_de_fijo = int(input("Ahora Ingresa tu número fijo: "))
-            Registro_manual_de_camper.append(telefono_de_fijo)
-            break
-        except ValueError:
-            print("Ingresa número de teléfono válido (número entero)")
-
-    estado = input("Ingresa estado en la que se encuentra el camper: ")
-    if estado.strip():  
-        Registro_manual_de_camper.append(estado)
-    else:
-        print("El estado no puede estar vacío. Por favor, ingrésalo nuevamente.")
-
-    riesgo = input("Ingresa el riesgo del camper: ")
-    if riesgo.strip(): 
-        Registro_manual_de_camper.append(riesgo)
-    else:
-        print("El riesgo no puede estar vacío. Por favor, ingrésalo nuevamente.")
-
-    print("Registro Terminado. Proximamente te Contactaremos.")
-    return Registro_manual_de_camper
-
-
-
-
-fake = Faker('es_CO')
-
-import json
-
-listado_de_documentos=[]
 def generar_documentos():
-   try:
-    with open("campers_Documentacion.json","r") as file:
-        documento=json.load(file)
-        if len(documento) >= 198:
-            return documento[:198]
-   except FileNotFoundError:
-    pass
-   
-    documentos = []
-    nuevo_documentos = []
-    for _ in range(198-len(documentos)):
-        nombre_de_camper = fake.name()
-        cedula = fake.unique.ssn()
-        numero_celular = fake.phone_number()
-        acudiente = fake.name()
-        estado = fake.random_element(elements=('En proceso de ingreso', 'Inscrito', 'Aprobado', 'Cursando', 'Graduado', 'Expulsado', 'Retirado'))
-        riesgo = fake.random_element(elements=('Alto', 'Medio', 'Bajo'))
-        direccion = fake.street_address()
-        numero_fijo = fake.numerify('6#########')
+    try:
+        with open("campers_Documentacion.json", "r") as file:
+            documento = json.load(file)
+            if len(documento) >= 198:
+                return documento[:198]
+    except FileNotFoundError:
+        pass
+    
+    documentos_iniciales = []
+    for _ in range(50):
+        nombre_de_camper = faker.name()
+        cedula = faker.unique.ssn()
+        numero_celular = faker.phone_number()
+        acudiente = faker.name()
+        estado = faker.random_element(elements=('En proceso de ingreso', 'Inscrito', 'Aprobado', 'Cursando', 'Graduado', 'Expulsado', 'Retirado'))
+        riesgo = faker.random_element(elements=('Alto', 'Medio', 'Bajo'))
+        direccion = faker.street_address()
+        numero_fijo = faker.numerify('6#########')
 
         documento = {
             "Nombre Del aspirante": nombre_de_camper,
@@ -190,74 +114,78 @@ def generar_documentos():
             "Numero De celular Del aspirante": numero_celular,
             "Numero fijo Del aspirante": numero_fijo,
             "Nombre Del acudiente": acudiente,
-            "Notas":[random.randint(10,100), random.randint(10,100)],
+            "Notas": [random.randint(10, 100), random.randint(10, 100)],
             "Estado Del camper": estado,
         }
 
+        documentos_iniciales.append(documento)
 
-        nuevo_documentos.append(documento)
-   
-    if documentos:
-        documentos.extend(nuevo_documentos)
-    else:
-        documentos = nuevo_documentos
+    with open("campers_Documentacion.json", "w") as file:
+        json.dump(documentos_iniciales, file)
 
+    return documentos_iniciales
 
-        with open("Campers_Documentacion.json", 'w') as file:
-              json.dump(documentos, file)
-   
-    return documentos
-
-listado_de_documentos = generar_documentos()
+def cargar_documentos():
+    try:
+        with open("campers_Documentacion.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
 
 
+def guardar_documentos(documentos):
+    with open("campers_Documentacion.json", "w") as file:
+        json.dump(documentos, file, indent=4)
+
+
+def ordenar_documentos_por_nombre(documentos):
+    return sorted(documentos, key=lambda x: x["Nombre Del aspirante"])
 
 
 Areas_de_entrenamiento = {
     "Ruta NodeJS": {
-        "Capacidad": 33,
+        
         "Modulos": ["NodeJS", "Express", "MongoDB"]
     },
     "Ruta Java": {
-        "Capacidad": 33,
+       
         "Modulos": ["Java", "Spring Boot", "Hibernate"]
     },
     "Ruta Netcore": {
-        "Capacidad": 33,
+    
         "Modulos": ["NetCore", "Entity Framework", "SQL Server"]
     },
     "Fundamentos de programación": {
-        "Capacidad": 33,
+        
         "Modulos": ["Introducción a la algoritmia", "PSeInt", "Python"]
     },
     "Programación Web": {
-        "Capacidad": 33,
         "Modulos": ["HTML", "CSS", "Bootstrap"]
     },
     "Programación formal": {
-        "Capacidad": 33,
         "Modulos": ["Java", "JavaScript", "C#"]
     },
     "Bases de datos": {
-        "Capacidad": 33,
         "Modulos": ["MySQL", "MongoDB", "PostgreSQL"]
     },
     "Backend": {
-        "Capacidad": 33,
         "duracion_meses":2,
         "Modulos": ["NetCore", "Spring Boot", "NodeJS y Express"]
     }
 }
 
+
+apolo = {}
+
+
 def Coordinadora_Registro_Notas():
-    nombre_completo = input("Ingresa nombre del camper que deseas buscar")
+    nombre_completo = input("Ingresa nombre del camper que deseas buscar").lower()
     for camper in listado_de_campers:
-        if camper["Nombre Completo"]==nombre_completo:
-            nota_teorica =float(input("Ingresa Nota Teorica"))
-            nota_practica=float(input("ingresa Nota Practica"))
+        if camper["Nombre Completo"].lower() == nombre_completo:
+            nota_teorica = float(input("Ingresa Nota Teorica: "))
+            nota_practica = float(input("Ingresa Nota Practica: "))
             
-            promedio = (nota_teorica+nota_practica)/2
-            
+            promedio = (nota_teorica + nota_practica) / 2
             if promedio >= 60:
                 print("El camper está aprobado con un promedio de", promedio)
                 camper["Estado"] = "Aprobado"
@@ -267,6 +195,8 @@ def Coordinadora_Registro_Notas():
             break
     else:
         print("Camper no encontrado")
+
+
 def evaluar_campers():
     for camper in listado_de_campers:
         for modulo in camper["Modulos"]:
@@ -293,8 +223,10 @@ def evaluar_campers():
       
         index = listado_de_campers.index(camper)
         listado_de_campers[index] = camper
+
 def menu_rol():
     while True:
+        print("                                               ")
         print("                                               ")
         print("-------- Escoje un Rol Para ingresar ----------")
         print("          1. Coordinador                       ")  
@@ -354,14 +286,11 @@ def menu_Camper():
         print("        2.Salir                         ")
         opcion_camper = int(input("Ingresa el numero asignado para cada Opcion Para ingresar"))
         if opcion_camper == 1:
-            print("")
-
-
-
-def registro_trainer():
-    
-
-
+             Registro_de_camper()
+             break
+        elif opcion_camper == 2:
+            menu_rol()
+            break
 def menu_trainer():
     while True:
         print("_____________Bienvenido Trainer______________")
@@ -370,7 +299,137 @@ def menu_trainer():
         print("             3.salir                               ")
         opcion_trainer = int(input("ingresa el numero desigando para ingresar a una Opcion"))
         if opcion_trainer == 1:
-            
+            registro_trainer()
+        elif opcion_trainer ==2:
+              ver_horarios()
+        elif opcion_trainer ==3:
+            break
+def registro_trainer():
+    datos_trainer = []
+    print("Bienvenido a Registro de Trainer")
+    print(" Ingresa Tus Datos Para Registrarte En el sistema y Asignarte una Clase ")
+    nombre = input(" Ingresa tu nombre Completo ")
+    datos_trainer.append(nombre)
+    numero_de_trainer = input("Ingresa tu Numero Telefonico")
+    datos_trainer.append(numero_de_trainer)
+
+
+def Registro_de_camper():
+    Registro_manual_de_camper = []
+
+    while True:
+        nombre_completo = input("Ingresa tu Nombre Completo: ")
+        Registro_manual_de_camper.append(nombre_completo)
+
+        if nombre_completo:
+            break
+        else:
+            print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
+
+    while True:
+        try:
+            Documento_de_camper = int(input("Ingresa numero de documento: "))
+            Registro_manual_de_camper.append(Documento_de_camper)
+            break
+        except ValueError:
+            print("Ingresa Un Documento valido (número entero)")
+
+    direcion = input("Ingresa tu dirección: ")
+    Registro_manual_de_camper.append(direcion)
+
+    if not direcion:
+        print("La dirección no puede estar vacía. Por favor, ingrésala nuevamente.")
+
+    acudiente = input("Ingresa el nombre de tu acudiente: ")
+    Registro_manual_de_camper.append(acudiente)
+
+    if not acudiente:
+        print("El nombre del acudiente no puede estar vacío. Por favor, ingrésalo nuevamente.")
+
+    while True:
+        try:
+            telefono_de_contacto = int(input("Ingresa tu número celular: "))
+            Registro_manual_de_camper.append(telefono_de_contacto)
+            break
+        except ValueError:
+            print("Ingresa número de teléfono válido (número entero)")
+
+    while True:
+        try:
+            telefono_de_fijo = int(input("Ahora Ingresa tu número fijo: "))
+            Registro_manual_de_camper.append(telefono_de_fijo)
+            break
+        except ValueError:
+            print("Ingresa número de teléfono válido (número entero)")
+
+    print("Elige el estado en el que te encuentras:")
+    print("1. En proceso de ingreso")
+    print("2. Inscrito")
+    print("3. Aprobado")
+    print("4. Cursando")
+    print("5. Graduado")
+    print("6. Expulsado")
+    print("7. Retirado")
+
+    while True:
+        opcion_estado = input("Selecciona una opción: ")
+
+        if opcion_estado == "1":
+            estado = "En proceso de ingreso"
+            break
+        elif opcion_estado == "2":
+            estado = "Inscrito"
+            break
+        elif opcion_estado == "3":
+            estado = "Aprobado"
+            break
+        elif opcion_estado == "4":
+            estado = "Cursando"
+            break
+        elif opcion_estado == "5":
+            estado = "Graduado"
+            break
+        elif opcion_estado == "6":
+            estado = "Expulsado"
+            break
+        elif opcion_estado == "7":
+            estado = "Retirado"
+            break
+        else:
+            print("Opción inválida. Por favor, selecciona una opción válida.")
+
+    Registro_manual_de_camper.append(estado)
+    
+    print("Registro Terminado. Proximamente te Contactaremos.")
+    menu_Camper()    
+    return Registro_manual_de_camper
+
+def menu_de_gestion():
+    num_campers = 50  
+
+    if os.path.exists("Campers_Documentacion.json"):
+        listado_de_documentos = cargar_documentos()
+    else:
+        listado_de_documentos = generar_documentos(num_campers)
+        guardar_documentos(listado_de_documentos)
+
+    print("Bienvenido al Sistema de Gestión de Campers")
+    print("1. Ver campers inscritos")
+    print("2. Salir")
+
+    while True:
+        opcion = input("Seleccione una opción: ")
+        if opcion == "1":
+            campers_inscritos_ordenados = ordenar_documentos_por_nombre(listado_de_documentos)
+            for camper in campers_inscritos_ordenados:
+                print(camper)
+            break
+        elif opcion == "2":
+            print("Saliendo del programa...")
+            break
+        else:
+            print("Opción inválida. Por favor, seleccione una opción válida.")
+
 def menu_coordinadora():
     while True:
         print("___________Campusland_________________")
@@ -411,11 +470,11 @@ def menu_coordinadora():
                     agregar_camper() 
                     break
                 elif opcion1 == 2:  
-                    print("Campers Inscritos Hasta la Fecha")
-                    for camper in listado_de_documentos:
-                        print(camper)
-                    break
+                   menu_de_gestion()
+                   break
                 elif opcion1 == 3:
+                    break
+                elif opcion1 ==4:
                     break
                 else:
                     print("Ingresa Opcion valida")
@@ -458,7 +517,7 @@ def menu_coordinadora():
 
 listado_de_documentos = generar_documentos()
 
-
+listado_de_campers = []
 
 menu_rol()
 
