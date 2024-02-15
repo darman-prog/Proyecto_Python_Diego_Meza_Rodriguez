@@ -328,11 +328,11 @@ def Registro_de_camper():
 
     while True:
         try:
-            Documento_de_camper = int(input("Ingresa numero de documento: "))
+            Documento_de_camper = int(input("Ingresa número de documento: "))
             Registro_manual_de_camper.append(Documento_de_camper)
             break
         except ValueError:
-            print("Ingresa Un Documento valido (número entero)")
+            print("Ingresa un Documento válido (número entero)")
 
     direcion = input("Ingresa tu dirección: ")
     Registro_manual_de_camper.append(direcion)
@@ -399,10 +399,47 @@ def Registro_de_camper():
             print("Opción inválida. Por favor, selecciona una opción válida.")
 
     Registro_manual_de_camper.append(estado)
+
+    riesgo = input("Ingresa el riesgo del camper: ")
+    Registro_manual_de_camper.append(riesgo)
     
-    print("Registro Terminado. Proximamente te Contactaremos.")
-    menu_Camper()    
+    print("Registro Terminado. Próximamente te Contactaremos.")
     return Registro_manual_de_camper
+
+
+def asignar_camper_a_ruta(camper, ruta, listado_de_rutas):
+    if len(ruta["campers"]) < 33:  # Capacidad máxima de la ruta
+        ruta["campers"].append(camper)
+        print(f"Camper {camper['Nombre Completo']} asignado a la ruta {ruta['nombre']}.")
+    else:
+        print(f"No se puede asignar al camper {camper['Nombre Completo']} a la ruta {ruta['nombre']} porque está completa.")
+
+    # Actualizar la lista de rutas
+    index = listado_de_rutas.index(ruta)
+    listado_de_rutas[index] = ruta
+
+def listar_camper_por_estado(listado_de_camper, estado):
+    campers_por_estado = [camper for camper in listado_de_camper if camper["Estado"] == estado]
+    return campers_por_estado
+
+
+def listar_camper_y_trainer_por_ruta(listado_de_rutas, nombre_ruta):
+    for ruta in listado_de_rutas:
+        if ruta["nombre"] == nombre_ruta:
+            print(f"Campers en la ruta {nombre_ruta}:")
+            for camper in ruta["campers"]:
+                print(camper["Nombre Completo"])
+
+            print(f"Trainer de la ruta {nombre_ruta}: {ruta['trainer']}")
+            break
+    else:
+        print(f"No se encontró la ruta {nombre_ruta}.")
+
+
+def listar_camper_por_riesgo(listado_de_camper, riesgo):
+    campers_por_riesgo = [camper for camper in listado_de_camper if camper["Riesgo"] == riesgo]
+    return campers_por_riesgo
+
 
 def menu_de_gestion():
     num_campers = 50  
