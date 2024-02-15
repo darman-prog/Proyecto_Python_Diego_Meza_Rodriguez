@@ -1,27 +1,30 @@
-from faker import Faker
+# from faker import Faker
 import random
 import json
 import os
+from Modulos_projecto.Modulo_menus import menu_trainer
 
-def ver_horarios():
-    opcion_horario = input("Escoje diurno o nocturno").strip().lower()
-    horario_Diurno = [
-        {"artemis": "6 AM Hasta 2 PM"},
-        {"Sputnik": "6 AM Hasta 2 PM"},
-        {"Apolo": "6 AM Hasta 2 PM"}
-    ]
-    horario_Nocturno = [
-        {"Artemis": "2 PM Hasta 10 PM"},
-        {"Sputnik": "2 PM Hasta 10 PM"},
-        {"Apolo": "2 PM Hasta 10 PM"}
-    ]
 
-    if opcion_horario == "diurno":
-        print(horario_Diurno)
-    elif opcion_horario == "nocturno":
-        print(horario_Nocturno)
 
-listado_de_campers = []
+# def ver_horarios():
+#     opcion_horario = input("Escoje diurno o nocturno").strip().lower()
+#     horario_Diurno = [
+#         {"artemis": "6 AM Hasta 2 PM"},
+#         {"Sputnik": "6 AM Hasta 2 PM"},
+#         {"Apolo": "6 AM Hasta 2 PM"}
+#     ]
+#     horario_Nocturno = [
+#         {"Artemis": "2 PM Hasta 10 PM"},
+#         {"Sputnik": "2 PM Hasta 10 PM"},
+#         {"Apolo": "2 PM Hasta 10 PM"}
+#     ]
+
+#     if opcion_horario == "diurno":
+#         print(horario_Diurno)
+#     elif opcion_horario == "nocturno":
+#         print(horario_Nocturno)
+
+listado_de_campers = []# buscar la manera de meter ala funcion el camper y que se guarde en el json
 def agregar_camper():
     campers = []
 
@@ -175,9 +178,6 @@ Areas_de_entrenamiento = {
 }
 
 
-apolo = {}
-
-
 def Coordinadora_Registro_Notas():
     nombre_completo = input("Ingresa nombre del camper que deseas buscar").lower()
     for camper in listado_de_campers:
@@ -301,64 +301,64 @@ def menu_Camper():
         elif opcion_camper == 2:
             menu_rol()
             break
-def menu_trainer():
-    while True:
-        print("_____________Bienvenido Trainer______________")
-        print("             1.Registro De Trainer           ")
-        print("             2.Horarios                    ") 
-        print("             3.salir                               ")
-        opcion_trainer = int(input("ingresa el numero desigando para ingresar a una Opcion"))
-        if opcion_trainer == 1:
-            registro_trainer()
-        elif opcion_trainer ==2:
-              ver_horarios()
-        elif opcion_trainer ==3:
-            break
+# def menu_trainer():
+#     while True:
+#         print("_____________Bienvenido Trainer______________")
+#         print("             1.Registro De Trainer           ")
+#         print("             2.Horarios                    ") 
+#         print("             3.salir                               ")
+#         opcion_trainer = int(input("ingresa el numero desigando para ingresar a una Opcion"))
+#         if opcion_trainer == 1:
+#             registro_trainer()
+#         elif opcion_trainer ==2:
+#               ver_horarios()
+#         elif opcion_trainer ==3:
+#             break
 
-def guardar_datos_trainer(datos_trainer,ruta_archivo):
-    with open(ruta_archivo,"a") as archivo:
-        json.dump(datos_trainer,archivo)
+# def guardar_datos_trainer(datos_trainer,ruta_archivo):
+#     with open(ruta_archivo,"a") as archivo:
+#         json.dump(datos_trainer,archivo)
         
-        archivo.write('\n')
+#         archivo.write('\n')
 
-def registro_trainer():
-    datos_trainer = []
-    print("Bienvenido a Registro de Trainer")
-    print(" Ingresa Tus Datos Para Registrarte En el sistema y Asignarte una Clase ")
-    while True:
-       try: 
-         nombre = input(" Ingresa tu nombre Completo ")
-         break
-       except ValueError:
-           print("Ingresa Nombre Valido")  
+# def registro_trainer():
+#     datos_trainer = []
+#     print("Bienvenido a Registro de Trainer")
+#     print(" Ingresa Tus Datos Para Registrarte En el sistema y Asignarte una Clase ")
+#     while True:
+#        try: 
+#          nombre = input(" Ingresa tu nombre Completo ")
+#          break
+#        except ValueError:
+#            print("Ingresa Nombre Valido")  
         
-    datos_trainer.append(nombre)
+#     datos_trainer.append(nombre)
     
-    while True:
-       try:
-          numero_de_trainer = int(input("Ingresa tu Numero Telefonico"))
-          break       
-       except ValueError:
-           print ("Ingresa Numero valido")
-    datos_trainer.append(numero_de_trainer)
+#     while True:
+#        try:
+#           numero_de_trainer = int(input("Ingresa tu Numero Telefonico"))
+#           break       
+#        except ValueError:
+#            print ("Ingresa Numero valido")
+#     datos_trainer.append(numero_de_trainer)
     
-    while True:
-       try:
-           documento_trainer=int(input("Ingresa Tu numero de Documento"))
-           break       
-       except ValueError:
-           print ("Ingresa Numero valido")
-    datos_trainer.append(documento_trainer)
-    while True:
-       try:
-            Conocimientos_trainer = input("Que Conocimientos Tienes En Programacion ")
-            break
-       except ValueError:
-            print("Ingresa Otra vez")       
-    datos_trainer.append(Conocimientos_trainer)
-    ruta_archivo = "datos_trainer.json"  
+#     while True:
+#        try:
+#            documento_trainer=int(input("Ingresa Tu numero de Documento"))
+#            break       
+#        except ValueError:
+#            print ("Ingresa Numero valido")
+#     datos_trainer.append(documento_trainer)
+#     while True:
+#        try:
+#             Conocimientos_trainer = input("Que Conocimientos Tienes En Programacion ")
+#             break
+#        except ValueError:
+#             print("Ingresa Otra vez")       
+#     datos_trainer.append(Conocimientos_trainer)
+#     ruta_archivo = "datos_trainer.json"  
     
-    guardar_datos_trainer(datos_trainer, ruta_archivo)
+#     guardar_datos_trainer(datos_trainer, ruta_archivo)
 
 
 def Registro_de_camper():
