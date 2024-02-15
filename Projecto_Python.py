@@ -196,6 +196,16 @@ def Coordinadora_Registro_Notas():
     else:
         print("Camper no encontrado")
 
+def eliminar_camper(nombre_completo, listado_de_campers):
+    for camper in listado_de_campers:
+        if camper["Nombre Completo"].lower() == nombre_completo.lower():
+            listado_de_campers.remove(camper)
+            print(f"El camper {nombre_completo} ha sido eliminado.")
+            guardar_documentos(listado_de_campers)  
+            return True
+    print(f"No se encontró ningún camper con el nombre {nombre_completo}.")
+    return False
+
 
 def evaluar_campers():
     for camper in listado_de_campers:
@@ -304,14 +314,51 @@ def menu_trainer():
               ver_horarios()
         elif opcion_trainer ==3:
             break
+
+def guardar_datos_trainer(datos_trainer,ruta_archivo):
+    with open(ruta_archivo,"a") as archivo:
+        json.dump(datos_trainer,archivo)
+        
+        archivo.write('\n')
+
 def registro_trainer():
     datos_trainer = []
     print("Bienvenido a Registro de Trainer")
     print(" Ingresa Tus Datos Para Registrarte En el sistema y Asignarte una Clase ")
-    nombre = input(" Ingresa tu nombre Completo ")
+    while True:
+       try: 
+         nombre = input(" Ingresa tu nombre Completo ")
+         break
+       except ValueError:
+           print("Ingresa Nombre Valido")  
+        
     datos_trainer.append(nombre)
-    numero_de_trainer = input("Ingresa tu Numero Telefonico")
+    
+    while True:
+       try:
+          numero_de_trainer = int(input("Ingresa tu Numero Telefonico"))
+          break       
+       except ValueError:
+           print ("Ingresa Numero valido")
     datos_trainer.append(numero_de_trainer)
+    
+    while True:
+       try:
+           documento_trainer=int(input("Ingresa Tu numero de Documento"))
+           break       
+       except ValueError:
+           print ("Ingresa Numero valido")
+    datos_trainer.append(documento_trainer)
+    while True:
+       try:
+            Conocimientos_trainer = input("Que Conocimientos Tienes En Programacion ")
+            break
+       except ValueError:
+            print("Ingresa Otra vez")       
+    datos_trainer.append(Conocimientos_trainer)
+    ruta_archivo = "datos_trainer.json"  
+    
+    guardar_datos_trainer(datos_trainer, ruta_archivo)
 
 
 def Registro_de_camper():
@@ -510,6 +557,7 @@ def menu_coordinadora():
                    menu_de_gestion()
                    break
                 elif opcion1 == 3:
+                    eliminar_camper()
                     break
                 elif opcion1 ==4:
                     break
@@ -541,10 +589,10 @@ def menu_coordinadora():
                     print("ingresa opcion valida")  
         elif opcion == 3:
             print("Ingresaste Trainers Activos")
-
+            registro_trainer()
         elif opcion == 4:
             print("Ingresaste a Estados de Campers")
-
+            listar_camper_por_estado()
         elif opcion == 5:
             print("Saliendo Del Programa")
             break
