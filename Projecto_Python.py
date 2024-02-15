@@ -408,13 +408,13 @@ def Registro_de_camper():
 
 
 def asignar_camper_a_ruta(camper, ruta, listado_de_rutas):
-    if len(ruta["campers"]) < 33:  # Capacidad máxima de la ruta
+    if len(ruta["campers"]) < 33:  
         ruta["campers"].append(camper)
         print(f"Camper {camper['Nombre Completo']} asignado a la ruta {ruta['nombre']}.")
     else:
         print(f"No se puede asignar al camper {camper['Nombre Completo']} a la ruta {ruta['nombre']} porque está completa.")
 
-    # Actualizar la lista de rutas
+   
     index = listado_de_rutas.index(ruta)
     listado_de_rutas[index] = ruta
 
