@@ -1,10 +1,10 @@
-# from faker import Faker
+from faker import Faker
 import random
 import json
 import os
-from Modulos_projecto.Modulo_menus import menu_trainer
-
-
+from Modulos_proyecto.Modulo_menus   import menu_trainer
+from Modulos_proyecto.Modulo_menus   import menu_rol
+from Modulos_proyecto.Modulo_trainer import registro_trainer
 
 # def ver_horarios():
 #     opcion_horario = input("Escoje diurno o nocturno").strip().lower()
@@ -26,68 +26,116 @@ from Modulos_projecto.Modulo_menus import menu_trainer
 
 listado_de_campers = []# buscar la manera de meter ala funcion el camper y que se guarde en el json
 def agregar_camper():
-    campers = []
+    camper = {}
 
     print("Ingresa los Datos del Camper que Deseas Agregar")
 
     while True:
-        try: 
-            nombre_completo = input("Ingresa el Nombre completo del Camper: ")
-            campers.append(nombre_completo)
+        nombre_completo = input("Ingresa el Nombre completo del Camper: ").strip()
+        if nombre_completo:
+            camper["Nombre Completo"] = nombre_completo
             break
-        except ValueError:
-            print("Ingresa Un Nombre valido")
+        else:
+            print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
 
     while True:
         try:
-            Documento = int(input("Ingresa numero de documento: "))
-            campers.append(Documento)
+            documento = int(input("Ingresa número de documento: "))
+            camper["Documento"] = documento
             break
         except ValueError:
-            print("Ingresa Un Documento valido")
+            print("Ingresa un Documento válido (número entero)")
 
-    while True:
-        direcion = input("Ingresa la direccion del Camper: ")
-        campers.append(direcion)
-        break
+    direccion = input("Ingresa la dirección del Camper: ").strip()
+    if direccion:
+        camper["Dirección"] = direccion
+    else:
+        print("La dirección no puede estar vacía. Por favor, ingrésala nuevamente.")
 
-    while True:
-        acudiente = input("Ingresa el nombre del acudiente: ")
-        campers.append(acudiente)
-        break
+    acudiente = input("Ingresa el nombre del acudiente: ").strip()
+    if acudiente:
+        camper["Acudiente"] = acudiente
+    else:
+        print("El nombre del acudiente no puede estar vacío. Por favor, ingrésalo nuevamente.")
 
     while True:
         try:
-            telefono_de_contacto = int(input("Ingresa el numero de celular del Camper: "))
-            campers.append(telefono_de_contacto)
+            telefono_celular = int(input("Ingresa el número de celular del Camper: "))
+            camper["Teléfono Celular"] = telefono_celular
             break
         except ValueError:
-            print("Ingresa numero de telefono valido")
+            print("Ingresa número de teléfono válido (número entero)")
 
     while True:
         try:
-            telefono_de_fijo = int(input("Ahora Ingresa el Numero Fijo del Camper: "))
-            campers.append(telefono_de_fijo)
+            telefono_fijo = int(input("Ahora Ingresa el Número Fijo del Camper: "))
+            camper["Teléfono Fijo"] = telefono_fijo
             break
         except ValueError:
-            print("Ingresa numero de fijo valido")
+            print("Ingresa número de teléfono válido (número entero)")
 
-    while True:
-        estado = input("Ingresa estado en la que se encuentra el camper: ")
-        campers.append(estado)
-        break
+    estado = input("Ingresa estado en la que se encuentra el camper: ").strip()
+    camper["Estado"] = estado
 
-    while True:
-        Riesgo = input("Ingresa el riesgo del camper: ")
-        campers.append(Riesgo)
-        break
-    
-    print("Camper Agregado")
-    listado_de_campers.append(campers)
-  
-    return campers
+    riesgo = input("Ingresa el riesgo del camper: ").strip()
+    camper["Riesgo"] = riesgo
+
+    print("Camper Agregado Exitosamente")
+
+    return camper
+
+
+def guardar_camper_en_json(camper, archivo_json):
+    try:
+        with open(archivo_json, 'r+') as file:
+            data = json.load(file)
+            data["campers"].append(camper)
+            file.seek(0)
+            json.dump(data, file, indent=4)
+    except FileNotFoundError:
+        print("El archivo JSON no existe.")
+
+
+archivo_json_existente = "campers_Documentacion.json"
+
+
+
+
+
+
+
 
 faker = Faker('es_CO')
+
+
+
+def crear_trainers_por_defecto():
+    trainers_por_defecto = [
+        {"nombre": "William Jose restrepo garcia", "telefono": "123456789", "documento": "123456789A", "conocimientos": "Backend"},
+        {"nombre": "Jose maurcio zaragosa ardila", "telefono": "987654321", "documento": "987654321B", "conocimientos": "JavaScript y Python"},
+        {"nombre": "edwin romario lopez rodriguez", "telefono": "111222333", "documento": "111222333C", "conocimientos": "Java y MongDB"},
+        {"nombre": "diana alejandra muñoz hernandez", "telefono": "444555666", "documento": "444555666", "conocimientos": "C++ y MySQL"},
+        {"nombre": "Roberto jose Silva ", "telefono": "777888999", "documento": "777888999E", "conocimientos": "FrontEnd"},
+        {"nombre": "Trainer6", "telefono": "000111222", "documento": "000111222F", "conocimientos": "CSS y HTML"}
+    ]
+
+    with open("trainers.json", "w") as file:
+        json.dump(trainers_por_defecto, file, indent=4)
+
+def listar_trainers():
+    try:
+        with open("datos_trainers.json","r") as file :
+            trainers = json.load(file)
+
+            for trainer in trainers:
+                 print("Nombre:", trainer["nombre"])
+                 print("Teléfono:", trainer["telefono"])
+                 print("Documento:", trainer["documento"])
+                 print("Conocimientos:", trainer["conocimientos"])
+                 print()  
+    except FileNotFoundError:
+        print("Archivo json No existe")
+
 
 def generar_documentos():
     try:
@@ -453,6 +501,9 @@ def Registro_de_camper():
     print("Registro Terminado. Próximamente te Contactaremos.")
     return Registro_manual_de_camper
 
+def guardar_documentos(documentos):
+    with open("campers_Documentacion.json", "w") as file:
+        json.dump(documentos, file, indent=4)
 
 def asignar_camper_a_ruta(camper, ruta, listado_de_rutas):
     if len(ruta["campers"]) < 33:  
@@ -483,58 +534,46 @@ def listar_camper_y_trainer_por_ruta(listado_de_rutas, nombre_ruta):
         print(f"No se encontró la ruta {nombre_ruta}.")
 
 
+
 def listar_camper_por_riesgo(listado_de_camper, riesgo):
     campers_por_riesgo = [camper for camper in listado_de_camper if camper["Riesgo"] == riesgo]
     return campers_por_riesgo
 
 
-def menu_de_gestion():
-    num_campers = 50  
-
+def campers_incristor_lista():
+    
     if os.path.exists("Campers_Documentacion.json"):
         listado_de_documentos = cargar_documentos()
     else:
-        listado_de_documentos = generar_documentos(num_campers)
+        listado_de_documentos = generar_documentos()
         guardar_documentos(listado_de_documentos)
-
-    print("Bienvenido al Sistema de Gestión de Campers")
-    print("1. Ver campers inscritos")
-    print("2. Salir")
-
-    while True:
-        opcion = input("Seleccione una opción: ")
-        if opcion == "1":
-            campers_inscritos_ordenados = ordenar_documentos_por_nombre(listado_de_documentos)
-            for camper in campers_inscritos_ordenados:
-                print(camper)
-            break
-        elif opcion == "2":
-            print("Saliendo del programa...")
-            break
-        else:
-            print("Opción inválida. Por favor, seleccione una opción válida.")
+        campers_inscritos_ordenados = ordenar_documentos_por_nombre(listado_de_documentos)
+        for camper in campers_inscritos_ordenados:
+          print(camper)
+       
 
 def menu_coordinadora():
     while True:
-        print("___________Campusland_________________")
+        print("___________Campusland_________________  ")
    
         print("____________ (Menu) ____________________")
-        print("      (Coordinacion Academica)                           ") 
+        
+        print("     Coordinacion Academica             ") 
          
-        print("1. Campers Inscritos/Agregar Camper ")
-        print("2. Coordinacion Academica/Registro de Notas de Campers ")
-        print("3. Trainers Activos/Rutas Asignadas ")
-        print("4. Estados de Campers/Informacion de campers           ")
-        print("5. Salir Del Programa               ")
+        print("1. Campers inscritos/Agregar Camper/eliminar registro de camper                    ")
+        print("2. Registro de Notas de Campers                                                    ")
+        print("3. Lista de trainers/Registro de Trainer                                           ")
+        print("4. Estados de Campers/                                                             ")
+        print("5. Salir Del Programa                                                              ")
 
-        print("____________________________________________")
+        print("____________________________________________                                       ")
 
         while True:
             try:
                 opcion = int(input("Selecciona un número designado para cada opción para ingresar: "))
                 break
             except ValueError:
-                print("Ingresa un numero del 1/5")
+                print("Ingresa un numero del 1 al5 ")
 
         if opcion == 1:
             print("Ingresaste a Campers Inscritos/Agregar Camper ")
@@ -554,55 +593,53 @@ def menu_coordinadora():
                     agregar_camper() 
                     break
                 elif opcion1 == 2:  
-                   menu_de_gestion()
-                   break
+                    campers_incristor_lista()
+                    break
                 elif opcion1 == 3:
-                    eliminar_camper()
+                    nombre_completo = input("Ingresa el nombre completo del camper que deseas eliminar: ")
+                    eliminar_camper(nombre_completo, listado_de_campers)
                     break
-                elif opcion1 ==4:
+                elif opcion1 == 4:
                     break
                 else:
                     print("Ingresa Opcion valida")
-
         elif opcion == 2:
-            print("Ingresaste Coordinacion Academica")
-            while True:
-                
-                print("1.Registro de Notas")
-                print("2.Eliminar Camper")
-                print("3. para volver Al menu principal")
-                
-                try:
-                    opcion2 = int(input("Ingresa Una Opcion valida"))
-                except ValueError:
-                    print("Ingresa Opcion valida")
-                
-                if opcion2 == 1:
-                    print("Ingresaste Registro de Notas")
-                    Coordinadora_Registro_Notas()
-                           
-                elif opcion2 == 2:
-                    print("Ingresaste a Eliminar Camper ") 
-                elif opcion2 == 3:
-                    break 
-                else:
-                    print("ingresa opcion valida")  
+                Coordinadora_Registro_Notas()
+                break 
         elif opcion == 3:
             print("Ingresaste Trainers Activos")
-            registro_trainer()
+            while True:
+                print("1. Listado De trainers ")
+                print("2. Registrar Trainer   ")
+                print("3. salir del programa  ")
+                try:
+                  opcion3 = int(input("Escoje una Opcion del 1 al 3"))
+                  break
+                except ValueError:
+                    print("Error Ingresa Un numero entero")
+                if opcion3 == 1:
+                    listar_trainers()
+                    break
+                elif opcion3 == 2:
+                    registro_trainer() 
+                    break
+                elif opcion3 == 3:
+                    break
+                else:
+                    print("Opcion invalida")
         elif opcion == 4:
-            print("Ingresaste a Estados de Campers")
-            listar_camper_por_estado()
+           print("Ingresaste a Estados de Campers")
+           estado = input("Ingresa el estado para ver campers: ")
+           campers_por_estado = listar_camper_por_estado(listar_camper_por_estado, estado)
+           for camper in campers_por_estado:
+              print(camper)
+        
         elif opcion == 5:
-            print("Saliendo Del Programa")
-            break
-
+          print("Saliendo Del Programa")
+          break
         else:
             print("Ingresa Opcion valida")
 
-listado_de_documentos = generar_documentos()
 
-listado_de_campers = []
 
 menu_rol()
-
