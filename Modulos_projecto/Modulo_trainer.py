@@ -1,12 +1,7 @@
-import json
+from utils import guardar_datos_trainer
 
 
 
-def guardar_datos_trainer(datos_trainer,ruta_archivo):
-    with open(ruta_archivo,"a") as archivo:
-        json.dump(datos_trainer,archivo)
-        
-        archivo.write('\n')
 
 def registro_trainer():
     datos_trainer = []
