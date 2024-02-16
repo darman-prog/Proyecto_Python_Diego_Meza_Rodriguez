@@ -1,11 +1,14 @@
 from faker import Faker
 import json
 import os
-from Modulos_proyecto.Modulo_menus import menu_trainer
-from Modulos_proyecto.Modulo_menus import menu_rol
-from Modulos_proyecto.Modulo_trainer import registro_trainer
-from Modulos_proyecto.Modulo_coordinacion import agregar_camper
-from Modulos_proyecto.utils import cargar_documentos
+from Modulo_menus import menu_trainer
+from Modulo_menus import menu_rol
+from Modulo_trainer import registro_trainer
+from Modulo_coordinacion import agregar_camper
+from utils import cargar_documentos
+from Modulo_coordinacion import listar_trainers
+from Modulo_coordinacion import listado_de_campers
+
 # def ver_horarios():
 #     opcion_horario = input("Escoje diurno o nocturno").strip().lower()
 #     horario_Diurno = [
@@ -24,7 +27,7 @@ from Modulos_proyecto.utils import cargar_documentos
 #     elif opcion_horario == "nocturno":
 #         print(horario_Nocturno)
 
-listado_de_campers = []# buscar la manera de meter ala funcion el camper y que se guarde en el json
+"""listado_de_campers = []"""
 """def agregar_camper():
     camper = {}
 
@@ -115,7 +118,7 @@ def crear_trainers_por_defecto():
 
     with open("trainers.json", "w") as file:
         json.dump(trainers_por_defecto, file, indent=4)
-
+"""
 def listar_trainers():
     try:
         with open("datos_trainers.json","r") as file :
@@ -129,7 +132,7 @@ def listar_trainers():
                  print()  
     except FileNotFoundError:
         print("Archivo json No existe")
-
+"""
 
 def generar_documentos():
     try:
@@ -512,9 +515,7 @@ def asignar_camper_a_ruta(camper, ruta, listado_de_rutas):
     index = listado_de_rutas.index(ruta)
     listado_de_rutas[index] = ruta
 
-def listar_camper_por_estado(listado_de_camper, estado):
-    campers_por_estado = [camper for camper in listado_de_camper if camper["Estado"] == estado]
-    return campers_por_estado
+
 
 
 def listar_camper_y_trainer_por_ruta(listado_de_rutas, nombre_ruta):
