@@ -1,14 +1,15 @@
 
-from Modulos_proyecto.Modulo_trainer import registro_trainer
+from Modulo_trainer import registro_trainer
 from utils import ver_horarios
-from utils import Registro_de_camper
+from Modulo_campers import Registro_de_camper
 from Modulo_coordinacion import agregar_camper
 from Modulo_coordinacion import eliminar_camper
 from Modulo_coordinacion import listar_camper_por_estado
 from Modulo_coordinacion import Coordinadora_Registro_Notas
 from Modulo_coordinacion import campers_incristos_lista
-from Proyecto_Python import listado_de_campers
-from Proyecto_Python import listar_trainers
+from Modulo_coordinacion import listado_de_campers
+from Modulo_coordinacion    import listar_trainers
+
 
 def menu_trainer():
     while True:
