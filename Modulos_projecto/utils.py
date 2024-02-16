@@ -1,5 +1,12 @@
+import json
+import faker
 
-
+def guardar_datos_trainer(datos_trainer,ruta_archivo):
+    with open(ruta_archivo,"a") as archivo:
+        json.dump(datos_trainer,archivo)
+        
+        archivo.write('\n')
+        
 def ver_horarios():
     opcion_horario = input("Escoje diurno o nocturno").strip().lower()
     horario_Diurno = [
@@ -19,94 +26,69 @@ def ver_horarios():
         print(horario_Nocturno)
 
 
-def Registro_de_camper():
-    Registro_manual_de_camper = []
+def cargar_documentos():
+    try:
+        with open("campers_Documentacion.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
 
-    while True:
-        nombre_completo = input("Ingresa tu Nombre Completo: ")
-        Registro_manual_de_camper.append(nombre_completo)
-
-        if nombre_completo:
-            break
-        else:
-            print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
-
-    while True:
-        try:
-            Documento_de_camper = int(input("Ingresa número de documento: "))
-            Registro_manual_de_camper.append(Documento_de_camper)
-            break
-        except ValueError:
-            print("Ingresa un Documento válido (número entero)")
-
-    direcion = input("Ingresa tu dirección: ")
-    Registro_manual_de_camper.append(direcion)
-
-    if not direcion:
-        print("La dirección no puede estar vacía. Por favor, ingrésala nuevamente.")
-
-    acudiente = input("Ingresa el nombre de tu acudiente: ")
-    Registro_manual_de_camper.append(acudiente)
-
-    if not acudiente:
-        print("El nombre del acudiente no puede estar vacío. Por favor, ingrésalo nuevamente.")
-
-    while True:
-        try:
-            telefono_de_contacto = int(input("Ingresa tu número celular: "))
-            Registro_manual_de_camper.append(telefono_de_contacto)
-            break
-        except ValueError:
-            print("Ingresa número de teléfono válido (número entero)")
-
-    while True:
-        try:
-            telefono_de_fijo = int(input("Ahora Ingresa tu número fijo: "))
-            Registro_manual_de_camper.append(telefono_de_fijo)
-            break
-        except ValueError:
-            print("Ingresa número de teléfono válido (número entero)")
-
-    print("Elige el estado en el que te encuentras:")
-    print("1. En proceso de ingreso")
-    print("2. Inscrito")
-    print("3. Aprobado")
-    print("4. Cursando")
-    print("5. Graduado")
-    print("6. Expulsado")
-    print("7. Retirado")
-
-    while True:
-        opcion_estado = input("Selecciona una opción: ")
-
-        if opcion_estado == "1":
-            estado = "En proceso de ingreso"
-            break
-        elif opcion_estado == "2":
-            estado = "Inscrito"
-            break
-        elif opcion_estado == "3":
-            estado = "Aprobado"
-            break
-        elif opcion_estado == "4":
-            estado = "Cursando"
-            break
-        elif opcion_estado == "5":
-            estado = "Graduado"
-            break
-        elif opcion_estado == "6":
-            estado = "Expulsado"
-            break
-        elif opcion_estado == "7":
-            estado = "Retirado"
-            break
-        else:
-            print("Opción inválida. Por favor, selecciona una opción válida.")
-
-    Registro_manual_de_camper.append(estado)
-
-    riesgo = input("Ingresa el riesgo del camper: ")
-    Registro_manual_de_camper.append(riesgo)
+def generar_documentos():
+    try:
+        with open("campers_Documentacion.json", "r") as file:
+            documento = json.load(file)
+            if len(documento) >= 198:
+                return documento[:198]
+    except FileNotFoundError:
+        pass
     
-    print("Registro Terminado. Próximamente te Contactaremos.")
-    return Registro_manual_de_camper
+    documentos_iniciales = []
+    for _ in range(30):
+        nombre_de_camper = faker.name()
+        cedula = faker.unique.ssn()
+        numero_celular = faker.phone_number()
+        acudiente = faker.name()
+        estado = faker.random_element(elements=('En proceso de ingreso', 'Inscrito', 'Aprobado', 'Cursando', 'Graduado', 'Expulsado', 'Retirado'))
+        riesgo = faker.random_element(elements=('Alto', 'Medio', 'Bajo'))
+        direccion = faker.street_address()
+        numero_fijo = faker.numerify('6#########')
+
+        documento = {
+            "Nombre Del aspirante": nombre_de_camper,
+            "Riesgo Del camper": riesgo,
+            "Direccion Del camper": direccion,
+            "Cedula Del aspirante": cedula,
+            "Numero De celular Del aspirante": numero_celular,
+            "Numero fijo Del aspirante": numero_fijo,
+            "Nombre Del acudiente": acudiente,
+            "Estado Del camper": estado,
+        }
+
+        documentos_iniciales.append(documento)
+
+    with open("campers_Documentacion.json", "w") as file:
+        json.dump(documentos_iniciales, file)
+
+    return documentos_iniciales
+
+def guardar_camper_en_json(camper, archivo_json):
+    try:
+        with open(archivo_json, 'r+') as file:
+            data = json.load(file)
+            data["campers"].append(camper)
+            file.seek(0)
+            json.dump(data, file, indent=4)
+    except FileNotFoundError:
+        print("El archivo JSON no existe.")
+
+def guardar_documentos(documentos):
+    with open("campers_Documentacion.json", "w") as file:
+        json.dump(documentos, file, indent=4)
+
+
+def guardar_documentos(documentos):
+    with open("campers_Documentacion.json", "w") as file:
+        json.dump(documentos, file, indent=4)
+
+def ordenar_documentos_por_nombre(documentos):
+    return sorted(documentos, key=lambda camper: camper.get("Nombre Completo", ""))
