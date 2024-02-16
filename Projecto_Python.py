@@ -1,11 +1,11 @@
 from faker import Faker
-import random
 import json
 import os
-from Modulos_proyecto.Modulo_menus   import menu_trainer
-from Modulos_proyecto.Modulo_menus   import menu_rol
+from Modulos_proyecto.Modulo_menus import menu_trainer
+from Modulos_proyecto.Modulo_menus import menu_rol
 from Modulos_proyecto.Modulo_trainer import registro_trainer
-
+from Modulos_proyecto.Modulo_coordinacion import agregar_camper
+from Modulos_proyecto.utils import cargar_documentos
 # def ver_horarios():
 #     opcion_horario = input("Escoje diurno o nocturno").strip().lower()
 #     horario_Diurno = [
@@ -25,7 +25,7 @@ from Modulos_proyecto.Modulo_trainer import registro_trainer
 #         print(horario_Nocturno)
 
 listado_de_campers = []# buscar la manera de meter ala funcion el camper y que se guarde en el json
-def agregar_camper():
+"""def agregar_camper():
     camper = {}
 
     print("Ingresa los Datos del Camper que Deseas Agregar")
@@ -74,18 +74,20 @@ def agregar_camper():
         except ValueError:
             print("Ingresa número de teléfono válido (número entero)")
 
-    estado = input("Ingresa estado en la que se encuentra el camper: ").strip()
+    estado = input("Ingresa estado en la que se encuentra el camper: ")
     camper["Estado"] = estado
 
-    riesgo = input("Ingresa el riesgo del camper: ").strip()
+    riesgo = input("Ingresa el riesgo del camper: ")
     camper["Riesgo"] = riesgo
 
     print("Camper Agregado Exitosamente")
 
+    guardar_camper_en_json(camper, "campers_Documentacion.json")  # Guardar el camper en el archivo JSON
+
     return camper
+"""
 
-
-def guardar_camper_en_json(camper, archivo_json):
+"""def guardar_camper_en_json(camper, archivo_json):
     try:
         with open(archivo_json, 'r+') as file:
             data = json.load(file)
@@ -95,18 +97,10 @@ def guardar_camper_en_json(camper, archivo_json):
     except FileNotFoundError:
         print("El archivo JSON no existe.")
 
-
 archivo_json_existente = "campers_Documentacion.json"
-
-
-
-
-
-
-
+"""
 
 faker = Faker('es_CO')
-
 
 
 def crear_trainers_por_defecto():
@@ -165,7 +159,6 @@ def generar_documentos():
             "Numero De celular Del aspirante": numero_celular,
             "Numero fijo Del aspirante": numero_fijo,
             "Nombre Del acudiente": acudiente,
-            "Notas": [random.randint(10, 100), random.randint(10, 100)],
             "Estado Del camper": estado,
         }
 
@@ -189,8 +182,10 @@ def guardar_documentos(documentos):
         json.dump(documentos, file, indent=4)
 
 
-def ordenar_documentos_por_nombre(documentos):
-    return sorted(documentos, key=lambda x: x["Nombre Del aspirante"])
+def guardar_documentos(documentos):
+    with open("campers_Documentacion.json", "w") as file:
+        json.dump(documentos, file, indent=4)
+
 
 
 Areas_de_entrenamiento = {
@@ -253,6 +248,7 @@ def eliminar_camper(nombre_completo, listado_de_campers):
             return True
     print(f"No se encontró ningún camper con el nombre {nombre_completo}.")
     return False
+
 
 
 def evaluar_campers():
@@ -540,7 +536,7 @@ def listar_camper_por_riesgo(listado_de_camper, riesgo):
     return campers_por_riesgo
 
 
-def campers_incristor_lista():
+def campers_incristos_lista():
     
     if os.path.exists("Campers_Documentacion.json"):
         listado_de_documentos = cargar_documentos()
@@ -551,6 +547,9 @@ def campers_incristor_lista():
         for camper in campers_inscritos_ordenados:
           print(camper)
        
+def ordenar_documentos_por_nombre(documentos):
+    return sorted(documentos, key=lambda camper: camper.get("Nombre Completo", ""))
+
 
 def menu_coordinadora():
     while True:
@@ -593,11 +592,11 @@ def menu_coordinadora():
                     agregar_camper() 
                     break
                 elif opcion1 == 2:  
-                    campers_incristor_lista()
+                    campers_incristos_lista()
                     break
                 elif opcion1 == 3:
                     nombre_completo = input("Ingresa el nombre completo del camper que deseas eliminar: ")
-                    eliminar_camper(nombre_completo, listado_de_campers)
+                    eliminar_camper(nombre_completo,listado_de_campers)
                     break
                 elif opcion1 == 4:
                     break
