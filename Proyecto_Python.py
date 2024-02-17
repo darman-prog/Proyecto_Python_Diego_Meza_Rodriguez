@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from faker import Faker
 import json
 import os
@@ -105,6 +106,13 @@ archivo_json_existente = "campers_Documentacion.json"
 
 faker = Faker('es_CO')
 
+def listar_camper_por_estado(lista_camper, estado):
+    """Filtra y devuelve una lista de campers que tienen el estado especificado."""
+    campers_filtrados = []
+    for camper in lista_camper:
+        if camper['Estado Del camper'] == estado:
+            campers_filtrados.append(camper)
+    return campers_filtrados
 
 def crear_trainers_por_defecto():
     trainers_por_defecto = [
@@ -115,6 +123,8 @@ def crear_trainers_por_defecto():
         {"nombre": "Roberto jose Silva ", "telefono": "777888999", "documento": "777888999E", "conocimientos": "FrontEnd"},
         {"nombre": "Trainer6", "telefono": "000111222", "documento": "000111222F", "conocimientos": "CSS y HTML"}
     ]
+
+    ruta_archivo = os.path.join("Archivos json","trainers.json")
 
     with open("trainers.json", "w") as file:
         json.dump(trainers_por_defecto, file, indent=4)
