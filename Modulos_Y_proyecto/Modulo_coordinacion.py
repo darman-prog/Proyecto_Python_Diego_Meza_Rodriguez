@@ -1,11 +1,19 @@
+import json
 import os
 from utils import guardar_camper_en_json
 from utils import generar_documentos
 from utils import guardar_documentos
 from utils import cargar_documentos
 from utils import ordenar_documentos_por_nombre
-from Proyecto_Python import listado_de_campers
 
+listado_de_campers = []
+def listar_camper_por_estado(lista_camper, estado):
+    """Filtra y devuelve una lista de campers que tienen el estado especificado."""
+    campers_filtrados = []
+    for camper in lista_camper:
+        if camper['Estado Del camper'] == estado:
+            campers_filtrados.append(camper)
+    return campers_filtrados
 
 
 def agregar_camper():
@@ -14,9 +22,16 @@ def agregar_camper():
     print("Ingresa los Datos del Camper que Deseas Agregar")
 
     while True:
-        nombre_completo = input("Ingresa el Nombre completo del Camper: ").strip()
-        if nombre_completo:
-            camper["Nombre Completo"] = nombre_completo
+        nombre = input("Ingresa el Nombre completo del Camper: ").strip()
+        if nombre:
+            camper["Nombre Completo"] = nombre
+            break
+        else:
+            print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
+    while True:
+        apellido = input("Ingresa el apellido completo del Camper: ").strip()
+        if apellido:
+            camper["Nombre Completo"] = apellido
             break
         else:
             print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
@@ -71,6 +86,21 @@ def agregar_camper():
 
 
 archivo_json_existente = "campers_Documentacion.json"
+
+def listar_trainers():
+    try:
+        with open("Modulos_json/trainers-json","r") as file :
+            trainers = json.load(file)
+
+            for trainer in trainers:
+                 print("Nombre:", trainer["nombre"])
+                 print("Teléfono:", trainer["telefono"])
+                 print("Documento:", trainer["documento"])
+                 print("Conocimientos:", trainer["conocimientos"])
+                 print()  
+    except FileNotFoundError:
+        print("Archivo json No existe")
+
 
 def campers_incristos_lista():
     

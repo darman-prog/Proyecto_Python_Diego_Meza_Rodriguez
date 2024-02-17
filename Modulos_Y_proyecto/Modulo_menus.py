@@ -1,4 +1,5 @@
 
+
 from Modulo_trainer import registro_trainer
 from utils import ver_horarios
 from Modulo_campers import Registro_de_camper
@@ -8,7 +9,7 @@ from Modulo_coordinacion import listar_camper_por_estado
 from Modulo_coordinacion import Coordinadora_Registro_Notas
 from Modulo_coordinacion import campers_incristos_lista
 from Modulo_coordinacion import listado_de_campers
-from Modulo_coordinacion    import listar_trainers
+from Modulo_coordinacion import listar_trainers
 
 
 def menu_trainer():
@@ -104,8 +105,8 @@ def menu_coordinadora():
          
         print("1. Campers inscritos/Agregar Camper/eliminar registro de camper                    ")
         print("2. Registro de Notas de Campers                                                    ")
-        print("3. Lista de trainers/Registro de Trainer                                           ")
-        print("4. Estados de Campers/                                                             ")
+        print("3. Lista de trainers activos/Registro de Trainer                                           ")
+        print("4. Estados de Campers                                                             ")
         print("5. Salir Del Programa                                                              ")
 
         print("____________________________________________                                       ")
@@ -149,9 +150,8 @@ def menu_coordinadora():
                 Coordinadora_Registro_Notas()
                 break 
         elif opcion == 3:
-            print("Ingresaste Trainers Activos")
             while True:
-                print("1. Listado De trainers ")
+                print("1. Listado De trainers activos ")
                 print("2. Registrar Trainer   ")
                 print("3. salir del programa  ")
                 try:

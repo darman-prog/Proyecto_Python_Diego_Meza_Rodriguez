@@ -2,13 +2,14 @@
 from faker import Faker
 import json
 import os
-from Modulo_menus import menu_trainer
+
 from Modulo_menus import menu_rol
 from Modulo_trainer import registro_trainer
 from Modulo_coordinacion import agregar_camper
 from utils import cargar_documentos
 from Modulo_coordinacion import listar_trainers
 from Modulo_coordinacion import listado_de_campers
+from Modulo_menus import menu_trainer
 
 # def ver_horarios():
 #     opcion_horario = input("Escoje diurno o nocturno").strip().lower()
@@ -114,6 +115,9 @@ def listar_camper_por_estado(lista_camper, estado):
             campers_filtrados.append(camper)
     return campers_filtrados
 
+import json
+import os
+
 def crear_trainers_por_defecto():
     trainers_por_defecto = [
         {"nombre": "William Jose restrepo garcia", "telefono": "123456789", "documento": "123456789A", "conocimientos": "Backend"},
@@ -124,14 +128,25 @@ def crear_trainers_por_defecto():
         {"nombre": "Trainer6", "telefono": "000111222", "documento": "000111222F", "conocimientos": "CSS y HTML"}
     ]
 
-    ruta_archivo = os.path.join("Archivos json","trainers.json")
+    # Nombre de la carpeta y archivo
+    nombre_carpeta = "Modulos_json"
+    nombre_archivo = "trainers.json"
 
-    with open("trainers.json", "w") as file:
+    # Verificar si la carpeta existe, si no, crearla
+    if not os.path.exists(nombre_carpeta):
+        os.makedirs(nombre_carpeta)
+
+    # Crear la ruta completa del archivo trainers.json en la carpeta Modulos_json
+    ruta_archivo = os.path.join(nombre_carpeta, nombre_archivo)
+
+    with open(ruta_archivo, "w") as file:
         json.dump(trainers_por_defecto, file, indent=4)
-"""
+
+
+
 def listar_trainers():
     try:
-        with open("datos_trainers.json","r") as file :
+        with open("Modulos_json/trainers-json","r") as file :
             trainers = json.load(file)
 
             for trainer in trainers:
@@ -142,7 +157,7 @@ def listar_trainers():
                  print()  
     except FileNotFoundError:
         print("Archivo json No existe")
-"""
+
 
 def generar_documentos():
     try:
@@ -572,8 +587,8 @@ def menu_coordinadora():
          
         print("1. Campers inscritos/Agregar Camper/eliminar registro de camper                    ")
         print("2. Registro de Notas de Campers                                                    ")
-        print("3. Lista de trainers/Registro de Trainer                                           ")
-        print("4. Estados de Campers/                                                             ")
+        print("3. Lista de trainers activos/Registro de Trainer                                           ")
+        print("4. Estados de Campers                                                             ")
         print("5. Salir Del Programa                                                              ")
 
         print("____________________________________________                                       ")
@@ -617,7 +632,6 @@ def menu_coordinadora():
                 Coordinadora_Registro_Notas()
                 break 
         elif opcion == 3:
-            print("Ingresaste Trainers Activos")
             while True:
                 print("1. Listado De trainers ")
                 print("2. Registrar Trainer   ")
