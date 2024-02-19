@@ -6,7 +6,7 @@ import os
 def guardar_datos_trainer(datos_trainer):
     try:
         with open("trainers.json", "a") as archivo:
-            archivo.write(','.join(map(str, datos_trainer)) + '\n')
+            archivo.write(','.join(map(str, datos_trainer)) + '\n')#tomamos cada elemento de datos trainer y lo convertimos en una cadena
     except FileNotFoundError:
         print("No se encontró el archivo 'trainers.json'.")
 
@@ -14,14 +14,14 @@ def guardar_datos_trainer(datos_trainer):
 def cargar_documentos():
     try:
         with open("campers_Documentacion.json", "r") as file:
-            return json.load(file)
+            return json.load(file)#cargamos el archivo json para leerlo
     except FileNotFoundError:
         return []
 
 # Función para guardar documentos (campers)
 def guardar_documentos(documentos):
     with open("campers_Documentacion.json", "w") as file:
-        json.dump(documentos, file, indent=4)
+        json.dump(documentos, file, indent=4)  #guardamos los documentos y los indentamos 
 
 # Función para guardar datos de la coordinadora
 def guardar_datos_coordinadora(datos_coordinadora):
