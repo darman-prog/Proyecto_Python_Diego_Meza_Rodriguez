@@ -1,3 +1,4 @@
+#registro de camper en el sistema 
 def Registro_de_camper():
     Registro_manual_de_camper = []
 
