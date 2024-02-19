@@ -88,7 +88,7 @@ def generar_documentos():
 def generar_trainers_campusland():
     faker = Faker("es_CO")
     if os.path.isfile("trainers.json"):
-        print("El archivo JSON ya existe. No se creará uno nuevo.")
+        
         return None
     
     numero_trainers = 6
