@@ -1,37 +1,91 @@
 import json
-import os
-from utils import guardar_camper_en_json
-from utils import generar_documentos
-from utils import guardar_documentos
-from utils import cargar_documentos
-from utils import ordenar_documentos_por_nombre
+from faker import Faker
+from utils import cargar_documentos, guardar_documentos, guardar_datos_coordinadora, rutas_entrenamiento
 
-listado_de_campers = []
-def listar_camper_por_estado(lista_camper, estado):
-    """Filtra y devuelve una lista de campers que tienen el estado especificado."""
-    campers_filtrados = []
-    for camper in lista_camper:
-        if camper['Estado Del camper'] == estado:
-            campers_filtrados.append(camper)
-    return campers_filtrados
+# Registro de notas de coordinadora
+def evaluar_campers():
+    campers = cargar_documentos()
+    
+    print("Lista de Campers Inscritos:")
+    for i, camper in enumerate(campers, 1):
+        print(f"{i}. {camper['Nombre Del Camper']}")
 
+    for camper in campers:
+        if camper["Estado Del camper"] == "Inscrito":
+            ruta = None
+            while ruta not in ["NodeJS", "Java", "NetCore"]:
+                ruta = input(f"Seleccione la ruta de entrenamiento para {camper['Nombre Del Camper']} (NodeJS, Java, NetCore): ")
+                if ruta == "NodeJS":
+                    ruta = rutas_entrenamiento["Ruta NodeJS"]
+                elif ruta == "Java":
+                    ruta = rutas_entrenamiento["Ruta Java"]
+                elif ruta == "NetCore":
+                    ruta = rutas_entrenamiento["Ruta NetCore"]
+                else:
+                    print("Ruta no válida. Intente de nuevo.")
 
+            camper["Ruta de Entrenamiento"] = ruta
+
+            nota_teorica = float(input(f"Ingrese la nota teórica para el camper {camper['Nombre Del Camper']}: "))
+            nota_practica = float(input(f"Ingrese la nota práctica para el camper {camper['Nombre Del Camper']}: "))
+            proyectos = float(input(f"Ingrese la nota de los proyectos para el camper {camper['Nombre Del Camper']}: "))
+            tareas = float(input(f"Ingrese la nota de las tareas para el camper {camper['Nombre Del Camper']}: "))
+            
+            promedio = (nota_teorica + nota_practica + proyectos + tareas) / 4
+            if promedio >= 60:
+                camper["Estado Del camper"] = "Aprobado"
+                camper["Riesgo Del Camper"] = "Medio"
+            else:
+                camper["Estado Del camper"] = "Rendimiento bajo"
+                camper["Riesgo Del Camper"] = "Medio"
+
+            guardar_documentos(campers)
+
+# Registro de notas de coordinadora
+def Coordinadora_Registro_Notas():
+    documentos = cargar_documentos()
+    
+    print("Lista de Campers:")
+    for i, camper in enumerate(documentos, 1):
+        print(f"{i}. {camper['Nombre Del Camper']}")
+
+    while True:
+        try:
+            opcion = int(input("Ingresa el número del camper que deseas buscar (0 para cancelar): "))
+            if opcion == 0:
+                print("Operación cancelada.")
+                return
+            elif 1 <= opcion <= len(documentos):
+                camper = documentos[opcion - 1]
+                nota_teorica = float(input(f"Ingrese la nota teórica para el camper {camper['Nombre Del Camper']}: "))
+                nota_practica = float(input(f"Ingrese la nota práctica para el camper {camper['Nombre Del Camper']}: "))
+                proyectos = float(input(f"Ingrese la nota de los proyectos para el camper {camper['Nombre Del Camper']}: "))
+                tareas = float(input(f"Ingrese la nota de las tareas para el camper {camper['Nombre Del Camper']}: "))
+                promedio = (nota_teorica + nota_practica + proyectos + tareas) / 4
+                if promedio >= 60:
+                    print(f"El camper {camper['Nombre Del Camper']} pasó con éxito el módulo con un promedio de {promedio}")
+                    camper["Riesgo Del Camper"] = "Paso con éxito"
+                else:
+                    print(f"El camper {camper['Nombre Del Camper']} no pasó el módulo con un promedio de {promedio}")
+                    camper["Riesgo Del Camper"] = "Alto"
+
+                guardar_documentos(documentos)  
+                break
+            else:
+                print("Número de camper inválido. Por favor, ingresa un número válido.")
+        except ValueError:
+            print("Ingresa un número entero.")
+
+# Agregar y eliminar camper            
 def agregar_camper():
     camper = {}
 
     print("Ingresa los Datos del Camper que Deseas Agregar")
 
     while True:
-        nombre = input("Ingresa el Nombre completo del Camper: ").strip()
-        if nombre:
-            camper["Nombre Completo"] = nombre
-            break
-        else:
-            print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
-    while True:
-        apellido = input("Ingresa el apellido completo del Camper: ").strip()
-        if apellido:
-            camper["Nombre Completo"] = apellido
+        nombre_completo = input("Ingresa el Nombre completo del Camper: ").strip()
+        if nombre_completo:
+            camper["Nombre Completo"] = nombre_completo
             break
         else:
             print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
@@ -80,94 +134,89 @@ def agregar_camper():
 
     print("Camper Agregado Exitosamente")
 
-    guardar_camper_en_json(camper, "campers_Documentacion.json")  # Guardar el camper en el archivo JSON
+    documentos = cargar_documentos()  # Cargar los documentos existentes
+    documentos.append(camper)  # Agregar el nuevo camper
+    guardar_documentos(documentos)  # Guardar los documentos actualizados
 
     return camper
 
-
-archivo_json_existente = "campers_Documentacion.json"
-
-def listar_trainers():
+def eliminar_camper():
     try:
-        with open("Modulos_json/trainers-json","r") as file :
-            trainers = json.load(file)
-
-            for trainer in trainers:
-                 print("Nombre:", trainer["nombre"])
-                 print("Teléfono:", trainer["telefono"])
-                 print("Documento:", trainer["documento"])
-                 print("Conocimientos:", trainer["conocimientos"])
-                 print()  
+        with open("campers_Documentacion.json", "r") as file:
+            documentos = json.load(file)
     except FileNotFoundError:
-        print("Archivo json No existe")
+        print("No se encontró el archivo de documentos.")
+        return
 
+    if not documentos:
+        print("No hay campers para eliminar.")
+        return
 
-def campers_incristos_lista():
-    
-    if os.path.exists("Campers_Documentacion.json"):
-        listado_de_documentos = cargar_documentos()
-    else:
-        listado_de_documentos = generar_documentos()
-        guardar_documentos(listado_de_documentos)
-        campers_inscritos_ordenados = ordenar_documentos_por_nombre(listado_de_documentos)
-        for camper in campers_inscritos_ordenados:
-          print(camper)
+    print("Lista de Campers:")
+    for i, camper in enumerate(documentos, 1):
+        print(f"{i}. {camper.get('Nombre Del Camper', 'Nombre no disponible')}")
 
-def eliminar_camper(nombre_completo, listado_de_campers):
-    for camper in listado_de_campers:
-        if camper["Nombre Completo"].lower() == nombre_completo.lower():
-            listado_de_campers.remove(camper)
-            print(f"El camper {nombre_completo} ha sido eliminado.")
-            guardar_documentos(listado_de_campers)  
-            return True
-    print(f"No se encontró ningún camper con el nombre {nombre_completo}.")
-    return False       
-
-
-def Coordinadora_Registro_Notas():
-    nombre_completo = input("Ingresa nombre del camper que deseas buscar").lower()
-    for camper in listado_de_campers:
-        if camper["Nombre Completo"].lower() == nombre_completo:
-            nota_teorica = float(input("Ingresa Nota Teorica: "))
-            nota_practica = float(input("Ingresa Nota Practica: "))
-            
-            promedio = (nota_teorica + nota_practica) / 2
-            if promedio >= 60:
-                print("El camper está aprobado con un promedio de", promedio)
-                camper["Estado"] = "Aprobado"
+    while True:
+        try:
+            opcion = int(input("Ingresa el número del camper que deseas eliminar (0 para cancelar): "))
+            if opcion == 0:
+                print("Operación cancelada.")
+                return
+            elif 1 <= opcion <= len(documentos):
+                del documentos[opcion - 1]
+                with open("campers_Documentacion.json", "w") as file:
+                    json.dump(documentos, file, indent=4)
+                print("Camper eliminado correctamente.")
+                return
             else:
-                print("El camper no está aprobado con un promedio de", promedio)
+                print("Número de camper inválido. Por favor, ingresa un número válido.")
+        except ValueError:
+            print("Ingresa un número entero.")
 
-            break
-    else:
-        print("Camper no encontrado")
-
-
-def Coordinadora_Registro_Notas():
-    nombre_completo = input("Ingresa nombre del camper que deseas buscar").lower()
-    for camper in listado_de_campers:
-        if camper["Nombre Completo"].lower() == nombre_completo:
-            nota_teorica = float(input("Ingresa Nota Teorica: "))
-            nota_practica = float(input("Ingresa Nota Practica: "))
-            
-            promedio = (nota_teorica + nota_practica) / 2
-            if promedio >= 60:
-                print("El camper está aprobado con un promedio de", promedio)
-                camper["Estado"] = "Aprobado"
-            else:
-                print("El camper no está aprobado con un promedio de", promedio)
-
-            break
-    else:
-        print("Camper no encontrado")
-
-def campers_incristos_lista():
+# Coordinadora ingresar trainer
+def registro_coordinadora():
+    datos_coordinadora = {}
+    print("Bienvenida al Registro de Trainer por parte de la Coordinadora")
+    print("Por favor, ingresa los datos del nuevo Trainer")
     
-    if os.path.exists("Campers_Documentacion.json"):
-        listado_de_documentos = cargar_documentos()
-    else:
-        listado_de_documentos = generar_documentos()
-        guardar_documentos(listado_de_documentos)
-        campers_inscritos_ordenados = ordenar_documentos_por_nombre(listado_de_documentos)
-        for camper in campers_inscritos_ordenados:
-          print(camper)
+    while True:
+        nombre = input("Ingresa el nombre completo del nuevo Trainer: ")
+        if nombre:
+            datos_coordinadora["Nombre"] = nombre
+            break
+        else:
+            print("El nombre no puede estar vacío. Por favor, ingrésalo nuevamente.")
+        
+    while True:
+        try:
+            numero_telefonico = int(input("Ingresa el número telefónico del nuevo Trainer: "))
+            datos_coordinadora["Documento"] = numero_telefonico
+            break
+        except ValueError:
+            print("Ingresa un número de teléfono válido.")
+    
+    while True:
+        try:
+            documento = int(input("Ingresa el número de documento del nuevo Trainer: "))
+            datos_coordinadora["Numero Telefono"] = documento
+            break
+        except ValueError:
+            print("Ingresa un número de documento válido.")
+    
+    while True:
+        ruta = input("Ingresa la ruta asignada para el nuevo Trainer: ")
+        if ruta:
+            datos_coordinadora["Ruta"] = ruta
+            break
+        else:
+            print("La ruta no puede estar vacía. Por favor, ingrésala nuevamente.")
+
+    while True:
+        salon_asignado = input("Ingresa el salón asignado para el nuevo Trainer: ")
+        if salon_asignado:
+            datos_coordinadora["Salon Asignado"] = salon_asignado
+            break
+        else:
+            print("El salón no puede estar vacío. Por favor, ingrésalo nuevamente.")
+
+    guardar_datos_coordinadora(datos_coordinadora)
