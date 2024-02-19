@@ -1,32 +1,16 @@
-# -*- coding: utf-8 -*-
 import json
-import faker
+from faker import Faker
+import os
 
-def guardar_datos_trainer(datos_trainer,ruta_archivo):
-    with open(ruta_archivo,"a") as archivo:
-        json.dump(datos_trainer,archivo)
-        
-        archivo.write('\n')
-        
-def ver_horarios():
-    opcion_horario = input("Escoje diurno o nocturno").strip().lower()
-    horario_Diurno = [
-        {"artemis": "6 AM Hasta 2 PM"},
-        {"Sputnik": "6 AM Hasta 2 PM"},
-        {"Apolo": "6 AM Hasta 2 PM"}
-    ]
-    horario_Nocturno = [
-        {"Artemis": "2 PM Hasta 10 PM"},
-        {"Sputnik": "2 PM Hasta 10 PM"},
-        {"Apolo": "2 PM Hasta 10 PM"}
-    ]
+# Función para guardar datos del trainer
+def guardar_datos_trainer(datos_trainer):
+    try:
+        with open("trainers.json", "a") as archivo:
+            archivo.write(','.join(map(str, datos_trainer)) + '\n')
+    except FileNotFoundError:
+        print("No se encontró el archivo 'trainers.json'.")
 
-    if opcion_horario == "diurno":
-        print(horario_Diurno)
-    elif opcion_horario == "nocturno":
-        print(horario_Nocturno)
-
-
+# Función para cargar documentos (campers)
 def cargar_documentos():
     try:
         with open("campers_Documentacion.json", "r") as file:
@@ -34,7 +18,31 @@ def cargar_documentos():
     except FileNotFoundError:
         return []
 
+# Función para guardar documentos (campers)
+def guardar_documentos(documentos):
+    with open("campers_Documentacion.json", "w") as file:
+        json.dump(documentos, file, indent=4)
+
+# Función para guardar datos de la coordinadora
+def guardar_datos_coordinadora(datos_coordinadora):
+    try:
+        with open("trainers.json", "r") as archivo:
+            trainers_existente = json.load(archivo)
+    except FileNotFoundError:
+        trainers_existente = []
+
+    trainers_existente.append(datos_coordinadora)
+
+    try:
+        with open("trainers.json", "w") as archivo:
+            json.dump(trainers_existente, archivo, indent=2)
+        print("Los datos de la coordinadora han sido guardados exitosamente ")
+    except FileNotFoundError:
+        print("No se encontró el archivo 'trainers.json'.")
+
+# Función para generar documentos (campers)
 def generar_documentos():
+    faker = Faker("es_CO")
     try:
         with open("campers_Documentacion.json", "r") as file:
             documento = json.load(file)
@@ -44,26 +52,30 @@ def generar_documentos():
         pass
     
     documentos_iniciales = []
-    for _ in range(30):
+    for _ in range(50):
         nombre_de_camper = faker.name()
         cedula = faker.unique.ssn()
         numero_celular = faker.phone_number()
         acudiente = faker.name()
-        estado = faker.random_element(elements=('En proceso de ingreso', 'Inscrito', 'Aprobado', 'Cursando', 'Graduado', 'Expulsado', 'Retirado'))
+        estado = faker.random_element(elements=('En proceso de ingreso', 'Aprobado', 'Cursando', 'Graduado', 'Expulsado', 'Retirado'))
         riesgo = faker.random_element(elements=('Alto', 'Medio', 'Bajo'))
         direccion = faker.street_address()
         numero_fijo = faker.numerify('6#########')
 
         documento = {
-            "Nombre Del aspirante": nombre_de_camper,
-            "Riesgo Del camper": riesgo,
-            "Direccion Del camper": direccion,
-            "Cedula Del aspirante": cedula,
-            "Numero De celular Del aspirante": numero_celular,
+            "Nombre Del Camper": nombre_de_camper,
+            "Riesgo Del Camper": riesgo,
+            "Direccion Del Camper": direccion,
+            "Cedula Del Camper": cedula,
+            "Numero De celular Del Camper": numero_celular,
             "Numero fijo Del aspirante": numero_fijo,
-            "Nombre Del acudiente": acudiente,
+            "Nombre Del acudiente del camper": acudiente,
             "Estado Del camper": estado,
+            "Ruta":""
         }
+
+        if estado in ["Aprobado", "Cursando"]:
+            documento["Ruta"] = faker.random_element(elements=("Ruta NodeJS", "Ruta Java", "Ruta NetCore"))
 
         documentos_iniciales.append(documento)
 
@@ -72,24 +84,71 @@ def generar_documentos():
 
     return documentos_iniciales
 
-def guardar_camper_en_json(camper, archivo_json):
-    try:
-        with open(archivo_json, 'r+') as file:
-            data = json.load(file)
-            data["campers"].append(camper)
-            file.seek(0)
-            json.dump(data, file, indent=4)
-    except FileNotFoundError:
-        print("El archivo JSON no existe.")
+# Función para generar trainers de Campusland
+def generar_trainers_campusland():
+    faker = Faker("es_CO")
+    if os.path.isfile("trainers.json"):
+        print("El archivo JSON ya existe. No se creará uno nuevo.")
+        return None
+    
+    numero_trainers = 6
+    trainers = []
+    for _ in range(numero_trainers):
+        trainer = {
+            "Nombre": faker.name(),
+            "Documento": faker.unique.random_number(digits=10),
+            "Numero Telefono": faker.phone_number(),
+            "Ruta": faker.random_element(elements=("Ruta NodeJS", "Ruta Java", "Ruta NetCore")),
+            "Salon Asignado": faker.random_element(elements=("Sputnik", "Apolo", "Artemis"))
+        }
+        trainers.append(trainer)
 
-def guardar_documentos(documentos):
-    with open("campers_Documentacion.json", "w") as file:
-        json.dump(documentos, file, indent=4)
+    with open("trainers.json", "w") as file:
+        json.dump(trainers, file,)
+    
+    return trainers
 
+# Definición de las rutas de entrenamiento
+rutas_entrenamiento = {
+    "Ruta NodeJS": {
+        "Modulos": ["NodeJS", "Express", "MongoDB"],
+        "SGDB_principal": "MongoDB",
+        "SGDB_alternativo": "MySQL"
+    },
+    "Ruta Java": {
+        "Modulos": ["Java", "Spring Boot", "Hibernate"],
+        "SGDB_principal": "MySQL",
+        "SGDB_alternativo": "PostgreSQL"
+    },
+    "Ruta NetCore": {
+        "Modulos": ["NetCore", "Entity Framework", "SQL Server"],
+        "SGDB_principal": "SQL Server",
+        "SGDB_alternativo": "PostgreSQL"
+    },
+    "Fundamentos de programación": {
+        "Modulos": ["Introducción a la algoritmia", "PSeInt", "Python"],
+        "SGDB_principal": "Ninguno",
+        "SGDB_alternativo": "Ninguno"
+    },
+    "Programación Web": {
+        "Modulos": ["HTML", "CSS", "Bootstrap"],
+        "SGDB_principal": "Ninguno",
+        "SGDB_alternativo": "Ninguno"
+    },
+    "Programación formal": {
+        "Modulos": ["Java", "JavaScript", "C#"],
+        "SGDB_principal": "Ninguno",
+        "SGDB_alternativo": "Ninguno"
+    },
+    "Bases de datos": {
+        "Modulos": ["MySQL", "MongoDB", "PostgreSQL"],
+        "SGDB_principal": "Ninguno",
+        "SGDB_alternativo": "Ninguno"
+    },
+    "Backend": {
+        "Modulos": ["NetCore", "Spring Boot", "NodeJS y Express"],
+        "SGDB_principal": "Ninguno",
+        "SGDB_alternativo": "Ninguno"
+    }
+}
 
-def guardar_documentos(documentos):
-    with open("campers_Documentacion.json", "w") as file:
-        json.dump(documentos, file, indent=4)
-
-def ordenar_documentos_por_nombre(documentos):
-    return sorted(documentos, key=lambda camper: camper.get("Nombre Completo", ""))
