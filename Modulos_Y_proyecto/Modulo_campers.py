@@ -84,7 +84,7 @@ def Registro_de_camper():
             print("Opción inválida. Por favor, selecciona una opción válida.")
 
     Registro_manual_de_camper.append(estado)
-
+ 
     riesgo = input("Ingresa el riesgo del camper: ")
     Registro_manual_de_camper.append(riesgo)
     
