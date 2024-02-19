@@ -1,10 +1,10 @@
 #registro de camper en el sistema 
 def Registro_de_camper():
-    Registro_manual_de_camper = []
+    Registro_manual_de_camper = [] #se crea una lista para agregar el registro manual
 
     while True:
         nombre_completo = input("Ingresa tu Nombre Completo: ")
-        Registro_manual_de_camper.append(nombre_completo)
+        Registro_manual_de_camper.append(nombre_completo) #se va agregando con .append
 
         if nombre_completo:
             break
@@ -47,7 +47,7 @@ def Registro_de_camper():
         except ValueError:
             print("Ingresa número de teléfono válido (número entero)")
 
-    print("Elige el estado en el que te encuentras:")
+    print("Elige el estado en el que te encuentras:") # como el camper no sabe los estados se los mostramos
     print("1. En proceso de ingreso")
     print("2. Inscrito")
     print("3. Aprobado")
@@ -89,4 +89,4 @@ def Registro_de_camper():
     Registro_manual_de_camper.append(riesgo)
     
     print("Registro Terminado. Próximamente te Contactaremos.")
-    return Registro_manual_de_camper
+    return Registro_manual_de_camper # devolvemos el camper registrado manualmente
