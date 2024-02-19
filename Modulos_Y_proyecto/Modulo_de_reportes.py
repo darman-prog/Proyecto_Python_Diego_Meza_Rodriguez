@@ -1,6 +1,6 @@
 import json
 #ver campers general
-def ver_documentos():
+def ver_documentos(): 
     try:
         with open("campers_Documentacion.json", "r") as file:
             documentos = json.load(file)
@@ -19,7 +19,7 @@ def listar_camper_por_estado(estado):
             for camper in campers_filtrados:
                 print(camper)
     except FileNotFoundError:
-        print("No se encontraron documentos.")
+        print("No se encontraron documentos.")  # listamos por estado entrando a la documentacion
 
 
 def listar_camper_por_riesgo(riesgo):
@@ -30,10 +30,10 @@ def listar_camper_por_riesgo(riesgo):
             for camper in campers_filtrados:
                 print(camper)
     except FileNotFoundError:
-        print("No se encontraron documentos.")
+        print("No se encontraron documentos.") #listamos por estado de riesgo
 #fin 
 
-def imprimir_trainers():
+def imprimir_trainers(): 
     try:
         with open("trainers.json", "r") as file:
             trainers = json.load(file)
