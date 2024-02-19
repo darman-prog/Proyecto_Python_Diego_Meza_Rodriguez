@@ -4,17 +4,17 @@ from utils import cargar_documentos, guardar_documentos, guardar_datos_coordinad
 
 # Registro de notas de coordinadora
 def evaluar_campers():
-    campers = cargar_documentos()
+    campers = cargar_documentos() #cargamos el documento json con los campers
     
     print("Lista de Campers Inscritos:")
-    for i, camper in enumerate(campers, 1):
+    for i, camper in enumerate(campers, 1): #enumeramos los campers inscritos
         print(f"{i}. {camper['Nombre Del Camper']}")
 
     for camper in campers:
-        if camper["Estado Del camper"] == "Inscrito":
+        if camper["Estado Del camper"] == "Inscrito": #creamos una condicion que si el camper se encuentra inscrito no le asignara una ruta
             ruta = None
             while ruta not in ["NodeJS", "Java", "NetCore"]:
-                ruta = input(f"Seleccione la ruta de entrenamiento para {camper['Nombre Del Camper']} (NodeJS, Java, NetCore): ")
+                ruta = input(f"Seleccione la ruta de entrenamiento para {camper['Nombre Del Camper']} (NodeJS, Java, NetCore): ") # asignamos o modificamos una ruta al camper elegido
                 if ruta == "NodeJS":
                     ruta = rutas_entrenamiento["Ruta NodeJS"]
                 elif ruta == "Java":
