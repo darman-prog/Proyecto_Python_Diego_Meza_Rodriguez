@@ -1,30 +1,22 @@
+from Modulo_coordinacion import agregar_camper #1
+from Modulo_coordinacion import eliminar_camper#2
+from Modulo_coordinacion import evaluar_campers#3
+from Modulo_coordinacion import Coordinadora_Registro_Notas#4
+from Modulo_coordinacion import registro_coordinadora#5
+#fin de importacion de coordinadora
 
+from Modulo_de_reportes import ver_documentos
+from Modulo_de_reportes import imprimir_trainers
+from Modulo_de_reportes import listar_camper_por_estado
+from Modulo_de_reportes import listar_camper_por_riesgo
+#fin de importacion de reportes
 
 from Modulo_trainer import registro_trainer
-from utils import ver_horarios
+from Modulo_trainer import ver_horarios
+#fin de importacion de trainer
+
 from Modulo_campers import Registro_de_camper
-from Modulo_coordinacion import agregar_camper
-from Modulo_coordinacion import eliminar_camper
-from Modulo_coordinacion import listar_camper_por_estado
-from Modulo_coordinacion import Coordinadora_Registro_Notas
-from Modulo_coordinacion import campers_incristos_lista
-from Modulo_coordinacion import listado_de_campers
-from Modulo_coordinacion import listar_trainers
-
-
-def menu_trainer():
-    while True:
-        print("_____________Bienvenido Trainer______________")
-        print("             1.Registro De Trainer           ")
-        print("             2.Horarios                    ") 
-        print("             3.salir                               ")
-        opcion_trainer = int(input("ingresa el numero desigando para ingresar a una Opcion"))
-        if opcion_trainer == 1:
-            registro_trainer()
-        elif opcion_trainer ==2:
-              ver_horarios()
-        elif opcion_trainer ==3:
-            break
+#fin de importacion de trainer
 
 
 def menu_rol():
@@ -82,18 +74,7 @@ def menu_rol():
         else:
             print("Ingresa Opcion valida")
 
-def menu_Camper():
-    while True:
-        print("________Bienvenido Camper_________")
-        print("        1.Registro De Camper      ")
-        print("        2.Salir                         ")
-        opcion_camper = int(input("Ingresa el numero asignado para cada Opcion Para ingresar"))
-        if opcion_camper == 1:
-             Registro_de_camper()
-             break
-        elif opcion_camper == 2:
-            menu_rol()
-            break
+
 
 def menu_coordinadora():
     while True:
@@ -107,8 +88,8 @@ def menu_coordinadora():
         print("2. Registro de Notas de Campers                                                    ")
         print("3. Lista de trainers activos/Registro de Trainer                                           ")
         print("4. Estados de Campers                                                             ")
-        print("5. Salir Del Programa                                                              ")
-
+        print("5. Evaluar Camper/Asignar Ruta                                                             ")
+        print("6. Salir del menu                                                                 ")
         print("____________________________________________                                       ")
 
         while True:
@@ -126,7 +107,7 @@ def menu_coordinadora():
                 print("2. Ver Campers Inscritos")
                 print("3. Eliminar Registro De camper")
                 print("4. para volver Al menu Principal")
-
+               
                 try:
                     opcion1 = int(input("Que Opcion eliges: "))
                 except ValueError:
@@ -136,49 +117,89 @@ def menu_coordinadora():
                     agregar_camper() 
                     break
                 elif opcion1 == 2:  
-                    campers_incristos_lista()
+                    ver_documentos()
                     break
                 elif opcion1 == 3:
-                    nombre_completo = input("Ingresa el nombre completo del camper que deseas eliminar: ")
-                    eliminar_camper(nombre_completo, listado_de_campers)
+                    eliminar_camper()
                     break
                 elif opcion1 == 4:
                     break
                 else:
                     print("Ingresa Opcion valida")
         elif opcion == 2:
-                Coordinadora_Registro_Notas()
-                break 
+            Coordinadora_Registro_Notas()
+            break 
         elif opcion == 3:
             while True:
-                print("1. Listado De trainers activos ")
+                print("1. Listado De trainers ")
                 print("2. Registrar Trainer   ")
                 print("3. salir del programa  ")
                 try:
-                  opcion3 = int(input("Escoje una Opcion del 1 al 3"))
-                  break
+                    opcion3 = int(input("Escoje una Opcion del 1 al 3: "))
                 except ValueError:
-                    print("Error Ingresa Un numero entero")
+                    print("Error: Ingresa un número entero.")
+                    continue
+
                 if opcion3 == 1:
-                    listar_trainers()
-                    break
+                    imprimir_trainers()
                 elif opcion3 == 2:
-                    registro_trainer() 
-                    break
+                    registro_coordinadora() 
                 elif opcion3 == 3:
                     break
                 else:
                     print("Opcion invalida")
         elif opcion == 4:
-           print("Ingresaste a Estados de Campers")
-           estado = input("Ingresa el estado para ver campers: ")
-           campers_por_estado = listar_camper_por_estado(listar_camper_por_estado, estado)
-           for camper in campers_por_estado:
-              print(camper)
-        
+            while True:  
+                print("bienvenido a estados de campers escoje una Opcion  ")
+                print("1.campers Inscritos           ")
+                print("2.campers en estado de riesgo ")
+                print("3.Salir del menu                       ")
+                print("4.Evaluar campers ")
+                try:
+                    estado_opcion = int(input("para selecionar una opcion escribe 1 o 2 y para salir 3"))
+                except ValueError:
+                    print("Ingresa Otra vez") 
+                if estado_opcion == 1:
+                    listar_camper_por_estado("Inscrito")
+                    break
+                elif estado_opcion == 2:
+                    listar_camper_por_riesgo("Alto")
+                    break
+                elif estado_opcion == 3:
+                    break
         elif opcion == 5:
-          print("Saliendo Del Programa")
-          break
+            evaluar_campers()
+        elif opcion == 6:
+            print("Saliendo Del menu....... ")
+            break     
         else:
             print("Ingresa Opcion valida")
 
+
+def menu_trainer():
+    while True:
+        print("_____________Bienvenido Trainer______________")
+        print("             1.Registro De Trainer           ")
+        print("             2.Horarios                    ") 
+        print("             3.salir                               ")
+        opcion_trainer = int(input("ingresa el numero desigando para ingresar a una Opcion"))
+        if opcion_trainer == 1:
+            registro_trainer()
+        elif opcion_trainer == 2:
+            ver_horarios()
+        elif opcion_trainer == 3:
+            break
+
+
+def menu_Camper():
+    while True:
+        print("________Bienvenido Camper_________")
+        print("        1.Registro De Camper      ")
+        print("        2.Salir                         ")
+        opcion_camper = int(input("Ingresa el numero asignado para cada Opcion Para ingresar"))
+        if opcion_camper == 1:
+            Registro_de_camper()
+            break
+        elif opcion_camper == 2:
+            menu_rol()
+            break
